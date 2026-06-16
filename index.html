@@ -519,6 +519,79 @@ function findProductByBarcode(barcode) {
         btn.disabled = true;
     }
 
+    // Таймаут на 10 секунд
+    const timeout = setTimeout(() => {
+        if (btn) {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+        alert('⏱️ Поиск продукта занял слишком много времени. Проверьте соединение или попробуйте позже.');
+    }, 10000);
+
+    fetch(`https://world.openfoodfacts.org/api/v2/product/${barcode}.json`)
+        .then(response => response.json())
+        .then(data => {
+            clearTimeout(timeout);
+            if (btn) {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+
+            if (data.status === 1 && data.product) {
+                const product = data.product;
+                let productName = product.product_name_ru || product.product_name || 'Неизвестный продукт';
+                
+                // ---- НОВАЯ ЛОГИКА: Определяем гистаминовый статус ----
+                const status = getHistamineStatus(product);
+                showProductStatus(productName, status);
+
+                const customInput = document.getElementById('custom-products');
+                if (customInput) {
+                    if (customInput.value.trim()) {
+                        customInput.value += ', ' + productName;
+                    } else {
+                        customInput.value = productName;
+                    }
+                }
+
+                if (product.ingredients_text_ru || product.ingredients_text) {
+                    console.log('Состав:', product.ingredients_text_ru || product.ingredients_text);
+                }
+            } else {
+                alert(`❌ Продукт с кодом ${barcode} не найден в базе. Вы можете ввести название вручную.`);
+            }
+        })
+        .catch(error => {
+            clearTimeout(timeout);
+            if (btn) {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+            console.error('Ошибка при запросе к Open Food Facts:', error);
+            alert('❌ Ошибка соединения с базой продуктов. Попробуйте позже.');
+        });
+}
+        // ---- НОВАЯ ФУНКЦИЯ: Определение статуса гистамина ----
+function getHistamineStatus(product) {
+    const tags = product.tags || [];
+    const lowHistamineTag = tags.find(tag => tag === 'en:Low histamine');
+    const highHistamineTag = tags.find(tag => tag === 'en:High histamine');
+
+    if (lowHistamineTag) {
+        return { level: 'low', label: '🟢 Низкий гистамин', description: 'Продукт с низким содержанием гистамина. Обычно безопасен.' };
+    } else if (highHistamineTag) {
+        return { level: 'high', label: '🔴 Высокий гистамин', description: 'Продукт с высоким содержанием гистамина. Рекомендуется избегать.' };
+    } else {
+        return { level: 'unknown', label: '🟡 Статус не определён', description: 'Проверьте состав продукта вручную или используйте справочник.' };
+    }
+}
+
+// ---- НОВАЯ ФУНКЦИЯ: Отображение статуса ----
+function showProductStatus(productName, status) {
+    const message = `📦 Продукт: ${productName}\n\n${status.label}\n${status.description}`;
+    alert(message);
+}
+
     fetch(`https://world.openfoodfacts.org/api/v2/product/${barcode}.json`)
         .then(response => response.json())
         .then(data => {
