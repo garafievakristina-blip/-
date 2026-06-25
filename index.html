@@ -37,7 +37,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen pb-24">
 
-    <!-- ЮРИДИЧЕСКИЙ ЭКРАН -->
+    <!-- ЮРИДИЧЕСКИЙ ЭКРАН + ВЫБОР ПОЛА -->
     <div id="legal-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 flex flex-col max-h-[90vh]">
             <div class="text-center text-3xl mb-2">⚖️</div>
@@ -48,7 +48,21 @@
                 <p><strong>3. Необходимость консультации специалиста.</strong> Любые выводы носят ознакомительный характер.</p>
                 <p><strong>4. Ограничение ответственности.</strong> Разработчик не несет ответственности за последствия использования дневника.</p>
             </div>
-            <div class="space-y-4">
+            <!-- ВЫБОР ПОЛА -->
+            <div class="mt-2">
+                <label class="block text-xs font-bold text-slate-600 mb-2">Выберите ваш пол:</label>
+                <div class="flex gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="gender" value="female" checked class="accent-emerald-600">
+                        <span class="text-sm">👩 Женщина</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="gender" value="male" class="accent-emerald-600">
+                        <span class="text-sm">👨 Мужчина</span>
+                    </label>
+                </div>
+            </div>
+            <div class="space-y-4 mt-4">
                 <label class="flex items-start gap-2.5 cursor-pointer select-none">
                     <input type="checkbox" id="legal-checkbox" onchange="toggleLegalButton()" class="w-5 h-5 mt-0.5 accent-emerald-600 rounded shrink-0">
                     <span class="text-[11px] text-slate-600 leading-tight">Я подтверждаю, что платформа <strong>не является медицинской</strong>.</span>
@@ -81,29 +95,27 @@
                         </div>
                     </div>
 
-                    
-
-                   <div class="mb-4">
-    <label class="block text-xs font-bold text-slate-600 mb-1">Введите продукты (через запятую):</label>
-    <div class="flex gap-2 items-center">
-        <input type="text" id="custom-products" placeholder="например: курица, рис, кабачок" class="flex-1 p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
-        <button onclick="startVoiceInput('custom-products')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold p-2 rounded-xl transition text-sm" title="Голосовой ввод">🎤</button>
-    </div>
-</div>
+                    <div class="mb-4">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Введите продукты (через запятую):</label>
+                        <div class="flex gap-2 items-center">
+                            <input type="text" id="custom-products" placeholder="например: курица, рис, кабачок" class="flex-1 p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
+                            <button onclick="startVoiceInput('custom-products')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold p-2 rounded-xl transition text-sm" title="Голосовой ввод">🎤</button>
+                        </div>
+                    </div>
 
                     <div class="mb-4">
                         <label class="block text-xs font-bold text-slate-600 mb-1">💊 Принятые лекарства (через запятую):</label>
                         <input type="text" id="medications" placeholder="цетиризин 10мг, дао-форте" class="w-full p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
                     </div>
 
-                   <div class="space-y-2 border-t border-slate-100 pt-3">
-    <label class="block text-xs font-bold text-slate-600 mb-1">📝 Какие симптомы вы испытываете? (через запятую)</label>
-    <div class="flex gap-2 items-center">
-        <input type="text" id="symptoms-text-input" placeholder="например: головная боль, усталость, зуд" class="flex-1 p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
-        <button onclick="startVoiceInput('symptoms-text-input')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold p-2 rounded-xl transition text-sm" title="Голосовой ввод">🎤</button>
-    </div>
-    <p class="text-[10px] text-slate-400 mt-1">Нажмите на микрофон и скажите текст.</p>
-</div>
+                    <div class="space-y-2 border-t border-slate-100 pt-3">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">📝 Какие симптомы вы испытываете? (через запятую)</label>
+                        <div class="flex gap-2 items-center">
+                            <input type="text" id="symptoms-text-input" placeholder="например: головная боль, усталость, зуд" class="flex-1 p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
+                            <button onclick="startVoiceInput('symptoms-text-input')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold p-2 rounded-xl transition text-sm" title="Голосовой ввод">🎤</button>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-1">Нажмите на микрофон и скажите текст.</p>
+                    </div>
 
                     <button onclick="saveLog()" class="w-full mt-5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-lg text-sm">Сохранить запись</button>
                 </div>
@@ -129,26 +141,26 @@
                         </div>
                     </div>
                     <div class="mb-4 flex gap-2 flex-wrap">
-    <button onclick="scanBarcode()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-xl transition text-sm min-w-[120px]">
-        📷 Сканировать камерой
-    </button>
-    <button onclick="uploadBarcodeImage()" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl transition text-sm min-w-[120px]">
-        📤 Загрузить фото
-    </button>
-</div>
-<input type="file" id="barcode-image-input" accept="image/*" style="display:none" onchange="decodeBarcodeFromImage(this)">
+                        <button onclick="scanBarcode()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-xl transition text-sm min-w-[120px]">
+                            📷 Сканировать камерой
+                        </button>
+                        <button onclick="uploadBarcodeImage()" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl transition text-sm min-w-[120px]">
+                            📤 Загрузить фото
+                        </button>
+                    </div>
+                    <input type="file" id="barcode-image-input" accept="image/*" style="display:none" onchange="decodeBarcodeFromImage(this)">
 
-<div id="scanner-container" style="display: none; margin-bottom: 15px;">
-    <div id="qr-reader" style="width: 100%; max-width: 400px; margin: 0 auto;"></div>
-    <button onclick="stopScanner()" class="w-full mt-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-xl transition text-sm">
-        ❌ Закрыть сканер
-    </button>
-</div>
+                    <div id="scanner-container" style="display: none; margin-bottom: 15px;">
+                        <div id="qr-reader" style="width: 100%; max-width: 400px; margin: 0 auto;"></div>
+                        <button onclick="stopScanner()" class="w-full mt-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-xl transition text-sm">
+                            ❌ Закрыть сканер
+                        </button>
+                    </div>
                     <div id="product-search-result" class="hidden"></div>
                 </div>
             </div>
 
-            <!-- ВКЛАДКА КАЛЕНДАРЬ -->
+            <!-- ВКЛАДКА КАЛЕНДАРЬ (для женщин) -->
             <div id="calendar-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-700 mb-2">🌸 Женский календарь</h3>
@@ -160,13 +172,13 @@
                         <div>
                             <label class="text-[10px] uppercase font-bold text-slate-400 mb-1">Длительность цикла (дней)</label>
                             <input type="number" id="cycle-length" min="20" max="45" value="28" class="w-full p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
-                       
+                        </div>
                     </div>
                     <div class="mb-4">
-    <label class="text-[10px] uppercase font-bold text-slate-400 mb-1">ПМС начинается за (дней до цикла)</label>
-    <input type="number" id="pms-start-days" min="1" max="14" value="7" class="w-full p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
-    <p class="text-[9px] text-slate-400 mt-1">Например, если ПМС начинается за 10 дней до менструации — поставьте 10.</p>
-</div>
+                        <label class="text-[10px] uppercase font-bold text-slate-400 mb-1">ПМС начинается за (дней до цикла)</label>
+                        <input type="number" id="pms-start-days" min="1" max="14" value="7" class="w-full p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
+                        <p class="text-[9px] text-slate-400 mt-1">Например, если ПМС начинается за 10 дней до менструации — поставьте 10.</p>
+                    </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="text-[10px] uppercase font-bold text-slate-400 mb-1">Текущий день цикла</label>
@@ -209,7 +221,7 @@
         <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl flex justify-around p-2 z-40">
             <button data-tab="diary" class="tab-button flex flex-col items-center p-1.5 text-emerald-600 font-bold text-[10px] gap-1 w-1/4"><span class="text-lg">📝</span><span>Дневник</span></button>
             <button data-tab="products" class="tab-button flex flex-col items-center p-1.5 text-slate-400 font-bold text-[10px] gap-1 w-1/4"><span class="text-lg">🔍</span><span>Продукты</span></button>
-            <button data-tab="calendar" class="tab-button flex flex-col items-center p-1.5 text-slate-400 font-bold text-[10px] gap-1 w-1/4"><span class="text-lg">🌸</span><span>Календарь</span></button>
+            <button data-tab="calendar" id="calendar-nav-btn" class="tab-button flex flex-col items-center p-1.5 text-slate-400 font-bold text-[10px] gap-1 w-1/4"><span class="text-lg">🌸</span><span>Календарь</span></button>
             <button data-tab="analytics" class="tab-button flex flex-col items-center p-1.5 text-slate-400 font-bold text-[10px] gap-1 w-1/4"><span class="text-lg">📊</span><span>Анализ</span></button>
         </nav>
 
@@ -274,423 +286,410 @@
             { name: "Шоколад / Какао", level: 2 }
         ].sort((a,b) => a.name.localeCompare(b.name));
 
-        // ----- МОЯ ТАБЛИЦА ГИСТАМИНОВЫХ ПРОДУКТОВ (вставьте свою полную) -----
+        // ---------- ПОЛНАЯ ТАБЛИЦА ПРОДУКТОВ ДЛЯ ГИСТАМИНА ----------
         const myHistamineDB = [
-    // ========== ОВОЩИ ==========
-    { name: "кабачок", level: "низкий" },
-    { name: "цуккини", level: "низкий" },
-    { name: "тыква", level: "низкий" },
-    { name: "брокколи", level: "низкий" },
-    { name: "цветная капуста", level: "низкий" },
-    { name: "белокочанная капуста", level: "низкий" },
-    { name: "пекинская капуста", level: "низкий" },
-    { name: "картофель", level: "низкий" },
-    { name: "батат", level: "низкий" },
-    { name: "морковь", level: "низкий" },
-    { name: "свёкла", level: "низкий" },
-    { name: "репа", level: "низкий" },
-    { name: "редька", level: "низкий" },
-    { name: "редис", level: "низкий" },
-    { name: "огурец", level: "низкий" },
-    { name: "салат", level: "низкий" },
-    { name: "айсберг", level: "низкий" },
-    { name: "руккола", level: "низкий" },
-    { name: "петрушка", level: "низкий" },
-    { name: "укроп", level: "низкий" },
-    { name: "базилик", level: "низкий" },
-    { name: "кинза", level: "высокий" },
-    { name: "щавель", level: "высокий" },
-    { name: "чеснок", level: "средний" },
-    { name: "лук", level: "средний" },
-    { name: "лук зелёный", level: "средний" },
-    { name: "лук порей", level: "средний" },
-    { name: "баклажан", level: "высокий" },
-    { name: "помидор", level: "высокий" },
-    { name: "томат", level: "высокий" },
-    { name: "перец сладкий", level: "средний" },
-    { name: "перец болгарский", level: "средний" },
-    { name: "перец острый", level: "высокий" },
-    { name: "чили", level: "высокий" },
-    { name: "шпинат", level: "высокий" },
-    { name: "капуста квашеная", level: "высокий" },
-    { name: "капуста маринованная", level: "высокий" },
-    { name: "соленья", level: "высокий" },
-    { name: "огурцы солёные", level: "высокий" },
-    { name: "помидоры солёные", level: "высокий" },
-    { name: "грибы", level: "средний" },
-    { name: "шампиньоны", level: "средний" },
-    { name: "вешенки", level: "средний" },
-    { name: "белые грибы", level: "средний" },
-
-    // ========== ФРУКТЫ И ЯГОДЫ ==========
-    { name: "яблоко", level: "низкий" },
-    { name: "яблоки", level: "низкий" },
-    { name: "груша", level: "низкий" },
-    { name: "груши", level: "низкий" },
-    { name: "айва", level: "низкий" },
-    { name: "хурма", level: "низкий" },
-    { name: "гранат", level: "низкий" },
-    { name: "инжир", level: "низкий" },
-    { name: "арбуз", level: "низкий" },
-    { name: "дыня", level: "низкий" },
-    { name: "черника", level: "низкий" },
-    { name: "голубика", level: "низкий" },
-    { name: "ежевика", level: "низкий" },
-    { name: "клюква", level: "низкий" },
-    { name: "брусника", level: "низкий" },
-    { name: "смородина", level: "низкий" },
-    { name: "крыжовник", level: "низкий" },
-    { name: "банан", level: "средний" },
-    { name: "бананы", level: "средний" },
-    { name: "манго", level: "средний" },
-    { name: "персик", level: "средний" },
-    { name: "нектарин", level: "средний" },
-    { name: "абрикос", level: "средний" },
-    { name: "слива", level: "средний" },
-    { name: "алыча", level: "средний" },
-    { name: "финик", level: "средний" },
-    { name: "малина", level: "высокий" },
-    { name: "клубника", level: "высокий" },
-    { name: "земляника", level: "высокий" },
-    { name: "вишня", level: "высокий" },
-    { name: "черешня", level: "высокий" },
-    { name: "киви", level: "высокий" },
-    { name: "ананас", level: "высокий" },
-    { name: "папайя", level: "высокий" },
-    { name: "апельсин", level: "высокий" },
-    { name: "грейпфрут", level: "высокий" },
-    { name: "лимон", level: "средний" },
-    { name: "лайм", level: "средний" },
-    { name: "мандарин", level: "высокий" },
-    { name: "помело", level: "высокий" },
-    { name: "виноград", level: "высокий" },
-
-    // ========== КРУПЫ, ЗЛАКИ, МУКА ==========
-    { name: "рис", level: "низкий" },
-    { name: "рис белый", level: "низкий" },
-    { name: "рис бурый", level: "низкий" },
-    { name: "рис дикий", level: "низкий" },
-    { name: "гречка", level: "низкий" },
-    { name: "гречневая крупа", level: "низкий" },
-    { name: "овсянка", level: "низкий" },
-    { name: "овсяные хлопья", level: "низкий" },
-    { name: "геркулес", level: "низкий" },
-    { name: "киноа", level: "низкий" },
-    { name: "пшено", level: "низкий" },
-    { name: "пшённая крупа", level: "низкий" },
-    { name: "кукурузная крупа", level: "низкий" },
-    { name: "манка", level: "низкий" },
-    { name: "манная крупа", level: "низкий" },
-    { name: "перловка", level: "низкий" },
-    { name: "перловая крупа", level: "низкий" },
-    { name: "ячневая крупа", level: "низкий" },
-    { name: "булгур", level: "низкий" },
-    { name: "кускус", level: "низкий" },
-    { name: "полба", level: "низкий" },
-    { name: "сорго", level: "низкий" },
-    { name: "амарант", level: "низкий" },
-    { name: "макароны", level: "низкий" },
-    { name: "спагетти", level: "низкий" },
-    { name: "лапша", level: "низкий" },
-    { name: "вермишель", level: "низкий" },
-    { name: "мука", level: "низкий" },
-    { name: "мука пшеничная", level: "низкий" },
-    { name: "мука ржаная", level: "низкий" },
-    { name: "хлеб", level: "средний" },
-    { name: "хлеб белый", level: "средний" },
-    { name: "хлеб ржаной", level: "средний" },
-    { name: "хлеб чёрный", level: "средний" },
-    { name: "бородинский", level: "средний" },
-    { name: "батон", level: "средний" },
-    { name: "булка", level: "средний" },
-    { name: "лаваш", level: "средний" },
-    { name: "сухари", level: "средний" },
-    { name: "гренки", level: "средний" },
-    { name: "суши", level: "средний" },
-
-    // ========== МЯСО, ПТИЦА, СУБПРОДУКТЫ ==========
-    { name: "курица", level: "низкий" },
-    { name: "куриное филе", level: "низкий" },
-    { name: "куриная грудка", level: "низкий" },
-    { name: "куриные ножки", level: "низкий" },
-    { name: "индейка", level: "низкий" },
-    { name: "филе индейки", level: "низкий" },
-    { name: "индюшка", level: "низкий" },
-    { name: "кролик", level: "низкий" },
-    { name: "говядина", level: "средний" },
-    { name: "телятина", level: "средний" },
-    { name: "баранина", level: "высокий" },
-    { name: "свинина", level: "высокий" },
-    { name: "утка", level: "высокий" },
-    { name: "гусь", level: "высокий" },
-    { name: "колбаса", level: "высокий" },
-    { name: "колбаса варёная", level: "высокий" },
-    { name: "колбаса копчёная", level: "высокий" },
-    { name: "сосиски", level: "высокий" },
-    { name: "сардельки", level: "высокий" },
-    { name: "ветчина", level: "высокий" },
-    { name: "балык", level: "высокий" },
-    { name: "карбонат", level: "высокий" },
-    { name: "окорок", level: "высокий" },
-    { name: "печень", level: "высокий" },
-    { name: "говяжья печень", level: "высокий" },
-    { name: "куриная печень", level: "высокий" },
-    { name: "почки", level: "высокий" },
-    { name: "сердце", level: "высокий" },
-    { name: "язык", level: "высокий" },
-    { name: "фарш", level: "высокий" },
-
-    // ========== РЫБА И МОРЕПРОДУКТЫ ==========
-    { name: "треска", level: "низкий" },
-    { name: "минтай", level: "низкий" },
-    { name: "пикша", level: "низкий" },
-    { name: "палтус", level: "низкий" },
-    { name: "камбала", level: "низкий" },
-    { name: "хек", level: "низкий" },
-    { name: "судак", level: "низкий" },
-    { name: "окунь", level: "низкий" },
-    { name: "щука", level: "низкий" },
-    { name: "налим", level: "низкий" },
-    { name: "тилапия", level: "низкий" },
-    { name: "пангасиус", level: "низкий" },
-    { name: "лосось", level: "высокий" },
-    { name: "сёмга", level: "высокий" },
-    { name: "форель", level: "высокий" },
-    { name: "горбуша", level: "высокий" },
-    { name: "кета", level: "высокий" },
-    { name: "нерка", level: "высокий" },
-    { name: "кижуч", level: "высокий" },
-    { name: "тунец", level: "высокий" },
-    { name: "скумбрия", level: "высокий" },
-    { name: "ставрида", level: "высокий" },
-    { name: "сардины", level: "высокий" },
-    { name: "анчоусы", level: "высокий" },
-    { name: "осётр", level: "высокий" },
-    { name: "белуга", level: "высокий" },
-    { name: "икра", level: "высокий" },
-    { name: "красная икра", level: "высокий" },
-    { name: "чёрная икра", level: "высокий" },
-    { name: "консервы рыбные", level: "высокий" },
-    { name: "шпроты", level: "высокий" },
-    { name: "килька", level: "высокий" },
-    { name: "мойва", level: "высокий" },
-    { name: "сельдь", level: "высокий" },
-    { name: "солёная рыба", level: "высокий" },
-    { name: "копчёная рыба", level: "высокий" },
-    { name: "вяленая рыба", level: "высокий" },
-    { name: "сушёная рыба", level: "высокий" },
-    { name: "креветки", level: "высокий" },
-    { name: "мидии", level: "высокий" },
-    { name: "кальмары", level: "высокий" },
-    { name: "осьминоги", level: "высокий" },
-    { name: "крабы", level: "высокий" },
-    { name: "крабовые палочки", level: "высокий" },
-
-    // ========== МОЛОЧНЫЕ ПРОДУКТЫ ==========
-    { name: "творог", level: "низкий" },
-    { name: "творог свежий", level: "низкий" },
-    { name: "творог обезжиренный", level: "низкий" },
-    { name: "творожная масса", level: "низкий" },
-    { name: "сыр", level: "высокий" },
-    { name: "сыр твёрдый", level: "высокий" },
-    { name: "сыр мягкий", level: "высокий" },
-    { name: "сыр плавленый", level: "высокий" },
-    { name: "пармезан", level: "высокий" },
-    { name: "гауда", level: "высокий" },
-    { name: "эдам", level: "высокий" },
-    { name: "чеддер", level: "высокий" },
-    { name: "моцарелла", level: "средний" },
-    { name: "рикотта", level: "средний" },
-    { name: "фета", level: "высокий" },
-    { name: "брынза", level: "высокий" },
-    { name: "сулугуни", level: "высокий" },
-    { name: "адыгейский сыр", level: "средний" },
-    { name: "мацони", level: "высокий" },
-    { name: "молоко", level: "средний" },
-    { name: "молоко цельное", level: "средний" },
-    { name: "молоко обезжиренное", level: "средний" },
-    { name: "молоко топлёное", level: "средний" },
-    { name: "ряженка", level: "высокий" },
-    { name: "кефир", level: "высокий" },
-    { name: "йогурт", level: "средний" },
-    { name: "йогурт питьевой", level: "средний" },
-    { name: "йогурт натуральный", level: "средний" },
-    { name: "йогурт без добавок", level: "средний" },
-    { name: "сметана", level: "средний" },
-    { name: "сливки", level: "средний" },
-    { name: "масло сливочное", level: "низкий" },
-    { name: "маргарин", level: "средний" },
-    { name: "сгущёнка", level: "средний" },
-    { name: "сгущённое молоко", level: "средний" },
-
-    // ========== ЯЙЦА ==========
-    { name: "яйцо", level: "средний" },
-    { name: "яйца", level: "средний" },
-    { name: "куриное яйцо", level: "средний" },
-    { name: "яйцо куриное", level: "средний" },
-    { name: "яйцо перепелиное", level: "средний" },
-    { name: "яичный белок", level: "низкий" },
-    { name: "яичный желток", level: "средний" },
-    { name: "меланж", level: "средний" },
-
-    // ========== НАПИТКИ ==========
-    { name: "чай", level: "низкий" },
-    { name: "чёрный чай", level: "низкий" },
-    { name: "зелёный чай", level: "низкий" },
-    { name: "белый чай", level: "низкий" },
-    { name: "травяной чай", level: "низкий" },
-    { name: "ромашковый чай", level: "низкий" },
-    { name: "мятный чай", level: "низкий" },
-    { name: "имбирный чай", level: "низкий" },
-    { name: "компот", level: "низкий" },
-    { name: "морс", level: "низкий" },
-    { name: "квас", level: "высокий" },
-    { name: "кофе", level: "высокий" },
-    { name: "кофе растворимый", level: "высокий" },
-    { name: "кофе молотый", level: "высокий" },
-    { name: "какао", level: "высокий" },
-    { name: "шоколад", level: "высокий" },
-    { name: "вино", level: "высокий" },
-    { name: "красное вино", level: "высокий" },
-    { name: "белое вино", level: "высокий" },
-    { name: "игристое вино", level: "высокий" },
-    { name: "шампанское", level: "высокий" },
-    { name: "пиво", level: "высокий" },
-    { name: "тёмное пиво", level: "высокий" },
-    { name: "светлое пиво", level: "высокий" },
-    { name: "сидр", level: "высокий" },
-    { name: "виски", level: "высокий" },
-    { name: "водка", level: "средний" },
-    { name: "коньяк", level: "средний" },
-    { name: "ром", level: "средний" },
-    { name: "джин", level: "средний" },
-    { name: "ликёр", level: "средний" },
-    { name: "сок", level: "средний" },
-    { name: "сок яблочный", level: "средний" },
-    { name: "сок апельсиновый", level: "высокий" },
-    { name: "сок томатный", level: "высокий" },
-    { name: "газировка", level: "средний" },
-    { name: "кола", level: "средний" },
-
-    // ========== ОРЕХИ, СЕМЕНА, СУХОФРУКТЫ ==========
-    { name: "грецкий орех", level: "средний" },
-    { name: "грецкие орехи", level: "средний" },
-    { name: "миндаль", level: "средний" },
-    { name: "кешью", level: "средний" },
-    { name: "фундук", level: "средний" },
-    { name: "лесной орех", level: "средний" },
-    { name: "арахис", level: "средний" },
-    { name: "фисташки", level: "средний" },
-    { name: "кедровый орех", level: "средний" },
-    { name: "бразильский орех", level: "средний" },
-    { name: "тыквенные семечки", level: "низкий" },
-    { name: "подсолнечные семечки", level: "низкий" },
-    { name: "семечки", level: "низкий" },
-    { name: "семена льна", level: "низкий" },
-    { name: "льняное семя", level: "низкий" },
-    { name: "чиа", level: "низкий" },
-    { name: "семена чиа", level: "низкий" },
-    { name: "кунжут", level: "низкий" },
-    { name: "изюм", level: "высокий" },
-    { name: "курага", level: "высокий" },
-    { name: "чернослив", level: "высокий" },
-    { name: "финики", level: "высокий" },
-    { name: "инжир сушёный", level: "высокий" },
-
-    // ========== МАСЛА И ЖИРЫ ==========
-    { name: "оливковое масло", level: "низкий" },
-    { name: "масло оливковое", level: "низкий" },
-    { name: "кокосовое масло", level: "низкий" },
-    { name: "масло кокосовое", level: "низкий" },
-    { name: "подсолнечное масло", level: "низкий" },
-    { name: "масло подсолнечное", level: "низкий" },
-    { name: "кукурузное масло", level: "низкий" },
-    { name: "льняное масло", level: "низкий" },
-    { name: "масло виноградных косточек", level: "низкий" },
-    { name: "масло грецкого ореха", level: "низкий" },
-
-    // ========== СПЕЦИИ И ПРИПРАВЫ ==========
-    { name: "соль", level: "низкий" },
-    { name: "морская соль", level: "низкий" },
-    { name: "йодированная соль", level: "низкий" },
-    { name: "перец чёрный", level: "высокий" },
-    { name: "перец душистый", level: "высокий" },
-    { name: "перец красный", level: "высокий" },
-    { name: "перец кайенский", level: "высокий" },
-    { name: "паприка", level: "высокий" },
-    { name: "карри", level: "высокий" },
-    { name: "мускатный орех", level: "высокий" },
-    { name: "гвоздика", level: "средний" },
-    { name: "корица", level: "низкий" },
-    { name: "имбирь", level: "низкий" },
-    { name: "куркума", level: "низкий" },
-    { name: "орегано", level: "низкий" },
-    { name: "душица", level: "низкий" },
-    { name: "розмарин", level: "низкий" },
-    { name: "тимьян", level: "низкий" },
-    { name: "чабрец", level: "низкий" },
-    { name: "шалфей", level: "низкий" },
-    { name: "эстрагон", level: "низкий" },
-    { name: "тархун", level: "низкий" },
-    { name: "лавровый лист", level: "низкий" },
-
-    // ========== СОУСЫ, КОНДИМЕНТЫ ==========
-    { name: "кетчуп", level: "высокий" },
-    { name: "майонез", level: "высокий" },
-    { name: "соевый соус", level: "высокий" },
-    { name: "уксус", level: "высокий" },
-    { name: "бальзамический уксус", level: "высокий" },
-    { name: "яблочный уксус", level: "высокий" },
-    { name: "винный уксус", level: "высокий" },
-    { name: "горчица", level: "высокий" },
-    { name: "хрен", level: "высокий" },
-    { name: "аджика", level: "высокий" },
-    { name: "чили соус", level: "высокий" },
-    { name: "томатная паста", level: "высокий" },
-    { name: "паста томатная", level: "высокий" },
-
-    // ========== СЛАДОСТИ, ДЕСЕРТЫ ==========
-    { name: "мёд", level: "средний" },
-    { name: "мед", level: "средний" },
-    { name: "варенье", level: "средний" },
-    { name: "джем", level: "средний" },
-    { name: "конфитюр", level: "средний" },
-    { name: "сахар", level: "низкий" },
-    { name: "сахарный песок", level: "низкий" },
-    { name: "рафинад", level: "низкий" },
-    { name: "шоколад", level: "высокий" },
-    { name: "шоколад молочный", level: "высокий" },
-    { name: "шоколад горький", level: "высокий" },
-    { name: "карамель", level: "средний" },
-    { name: "мармелад", level: "средний" },
-    { name: "зефир", level: "средний" },
-    { name: "пастила", level: "средний" },
-    { name: "халва", level: "средний" },
-    { name: "печенье", level: "средний" },
-    { name: "пряники", level: "средний" },
-    { name: "вафли", level: "средний" },
-    { name: "кекс", level: "средний" },
-    { name: "торт", level: "средний" },
-    { name: "пирожное", level: "средний" },
-    { name: "мороженое", level: "высокий" },
-
-    // ========== ГОТОВЫЕ БЛЮДА ==========
-    { name: "пельмени", level: "средний" },
-    { name: "вареники", level: "средний" },
-    { name: "манты", level: "средний" },
-    { name: "чебуреки", level: "средний" },
-    { name: "блины", level: "средний" },
-    { name: "оладьи", level: "средний" },
-    { name: "сырники", level: "средний" },
-    { name: "запеканка", level: "средний" },
-    { name: "пицца", level: "высокий" },
-    { name: "суши", level: "высокий" },
-    { name: "роллы", level: "высокий" },
-    { name: "бургер", level: "высокий" },
-    { name: "шаурма", level: "высокий" },
-    { name: "плов", level: "средний" },
-    { name: "лапша", level: "средний" },
-];
+            // Овощи
+            { name: "кабачок", level: "низкий" },
+            { name: "цуккини", level: "низкий" },
+            { name: "тыква", level: "низкий" },
+            { name: "брокколи", level: "низкий" },
+            { name: "цветная капуста", level: "низкий" },
+            { name: "белокочанная капуста", level: "низкий" },
+            { name: "пекинская капуста", level: "низкий" },
+            { name: "картофель", level: "низкий" },
+            { name: "батат", level: "низкий" },
+            { name: "морковь", level: "низкий" },
+            { name: "свёкла", level: "низкий" },
+            { name: "репа", level: "низкий" },
+            { name: "редька", level: "низкий" },
+            { name: "редис", level: "низкий" },
+            { name: "огурец", level: "низкий" },
+            { name: "салат", level: "низкий" },
+            { name: "айсберг", level: "низкий" },
+            { name: "руккола", level: "низкий" },
+            { name: "петрушка", level: "низкий" },
+            { name: "укроп", level: "низкий" },
+            { name: "базилик", level: "низкий" },
+            { name: "кинза", level: "высокий" },
+            { name: "щавель", level: "высокий" },
+            { name: "чеснок", level: "средний" },
+            { name: "лук", level: "средний" },
+            { name: "лук зелёный", level: "средний" },
+            { name: "лук порей", level: "средний" },
+            { name: "баклажан", level: "высокий" },
+            { name: "помидор", level: "высокий" },
+            { name: "томат", level: "высокий" },
+            { name: "перец сладкий", level: "средний" },
+            { name: "перец болгарский", level: "средний" },
+            { name: "перец острый", level: "высокий" },
+            { name: "чили", level: "высокий" },
+            { name: "шпинат", level: "высокий" },
+            { name: "капуста квашеная", level: "высокий" },
+            { name: "капуста маринованная", level: "высокий" },
+            { name: "соленья", level: "высокий" },
+            { name: "огурцы солёные", level: "высокий" },
+            { name: "помидоры солёные", level: "высокий" },
+            { name: "грибы", level: "средний" },
+            { name: "шампиньоны", level: "средний" },
+            { name: "вешенки", level: "средний" },
+            { name: "белые грибы", level: "средний" },
+            // Фрукты и ягоды
+            { name: "яблоко", level: "низкий" },
+            { name: "яблоки", level: "низкий" },
+            { name: "груша", level: "низкий" },
+            { name: "груши", level: "низкий" },
+            { name: "айва", level: "низкий" },
+            { name: "хурма", level: "низкий" },
+            { name: "гранат", level: "низкий" },
+            { name: "инжир", level: "низкий" },
+            { name: "арбуз", level: "низкий" },
+            { name: "дыня", level: "низкий" },
+            { name: "черника", level: "низкий" },
+            { name: "голубика", level: "низкий" },
+            { name: "ежевика", level: "низкий" },
+            { name: "клюква", level: "низкий" },
+            { name: "брусника", level: "низкий" },
+            { name: "смородина", level: "низкий" },
+            { name: "крыжовник", level: "низкий" },
+            { name: "банан", level: "средний" },
+            { name: "бананы", level: "средний" },
+            { name: "манго", level: "средний" },
+            { name: "персик", level: "средний" },
+            { name: "нектарин", level: "средний" },
+            { name: "абрикос", level: "средний" },
+            { name: "слива", level: "средний" },
+            { name: "алыча", level: "средний" },
+            { name: "финик", level: "средний" },
+            { name: "малина", level: "высокий" },
+            { name: "клубника", level: "высокий" },
+            { name: "земляника", level: "высокий" },
+            { name: "вишня", level: "высокий" },
+            { name: "черешня", level: "высокий" },
+            { name: "киви", level: "высокий" },
+            { name: "ананас", level: "высокий" },
+            { name: "папайя", level: "высокий" },
+            { name: "апельсин", level: "высокий" },
+            { name: "грейпфрут", level: "высокий" },
+            { name: "лимон", level: "средний" },
+            { name: "лайм", level: "средний" },
+            { name: "мандарин", level: "высокий" },
+            { name: "помело", level: "высокий" },
+            { name: "виноград", level: "высокий" },
+            // Крупы, злаки
+            { name: "рис", level: "низкий" },
+            { name: "рис белый", level: "низкий" },
+            { name: "рис бурый", level: "низкий" },
+            { name: "рис дикий", level: "низкий" },
+            { name: "гречка", level: "низкий" },
+            { name: "гречневая крупа", level: "низкий" },
+            { name: "овсянка", level: "низкий" },
+            { name: "овсяные хлопья", level: "низкий" },
+            { name: "геркулес", level: "низкий" },
+            { name: "киноа", level: "низкий" },
+            { name: "пшено", level: "низкий" },
+            { name: "пшённая крупа", level: "низкий" },
+            { name: "кукурузная крупа", level: "низкий" },
+            { name: "манка", level: "низкий" },
+            { name: "манная крупа", level: "низкий" },
+            { name: "перловка", level: "низкий" },
+            { name: "перловая крупа", level: "низкий" },
+            { name: "ячневая крупа", level: "низкий" },
+            { name: "булгур", level: "низкий" },
+            { name: "кускус", level: "низкий" },
+            { name: "полба", level: "низкий" },
+            { name: "сорго", level: "низкий" },
+            { name: "амарант", level: "низкий" },
+            { name: "макароны", level: "низкий" },
+            { name: "спагетти", level: "низкий" },
+            { name: "лапша", level: "низкий" },
+            { name: "вермишель", level: "низкий" },
+            { name: "мука", level: "низкий" },
+            { name: "мука пшеничная", level: "низкий" },
+            { name: "мука ржаная", level: "низкий" },
+            { name: "хлеб", level: "средний" },
+            { name: "хлеб белый", level: "средний" },
+            { name: "хлеб ржаной", level: "средний" },
+            { name: "хлеб чёрный", level: "средний" },
+            { name: "бородинский", level: "средний" },
+            { name: "батон", level: "средний" },
+            { name: "булка", level: "средний" },
+            { name: "лаваш", level: "средний" },
+            { name: "сухари", level: "средний" },
+            { name: "гренки", level: "средний" },
+            { name: "суши", level: "средний" },
+            // Мясо, птица, субпродукты
+            { name: "курица", level: "низкий" },
+            { name: "куриное филе", level: "низкий" },
+            { name: "куриная грудка", level: "низкий" },
+            { name: "куриные ножки", level: "низкий" },
+            { name: "индейка", level: "низкий" },
+            { name: "филе индейки", level: "низкий" },
+            { name: "индюшка", level: "низкий" },
+            { name: "кролик", level: "низкий" },
+            { name: "говядина", level: "средний" },
+            { name: "телятина", level: "средний" },
+            { name: "баранина", level: "высокий" },
+            { name: "свинина", level: "высокий" },
+            { name: "утка", level: "высокий" },
+            { name: "гусь", level: "высокий" },
+            { name: "колбаса", level: "высокий" },
+            { name: "колбаса варёная", level: "высокий" },
+            { name: "колбаса копчёная", level: "высокий" },
+            { name: "сосиски", level: "высокий" },
+            { name: "сардельки", level: "высокий" },
+            { name: "ветчина", level: "высокий" },
+            { name: "балык", level: "высокий" },
+            { name: "карбонат", level: "высокий" },
+            { name: "окорок", level: "высокий" },
+            { name: "печень", level: "высокий" },
+            { name: "говяжья печень", level: "высокий" },
+            { name: "куриная печень", level: "высокий" },
+            { name: "почки", level: "высокий" },
+            { name: "сердце", level: "высокий" },
+            { name: "язык", level: "высокий" },
+            { name: "фарш", level: "высокий" },
+            // Рыба и морепродукты
+            { name: "треска", level: "низкий" },
+            { name: "минтай", level: "низкий" },
+            { name: "пикша", level: "низкий" },
+            { name: "палтус", level: "низкий" },
+            { name: "камбала", level: "низкий" },
+            { name: "хек", level: "низкий" },
+            { name: "судак", level: "низкий" },
+            { name: "окунь", level: "низкий" },
+            { name: "щука", level: "низкий" },
+            { name: "налим", level: "низкий" },
+            { name: "тилапия", level: "низкий" },
+            { name: "пангасиус", level: "низкий" },
+            { name: "лосось", level: "высокий" },
+            { name: "сёмга", level: "высокий" },
+            { name: "форель", level: "высокий" },
+            { name: "горбуша", level: "высокий" },
+            { name: "кета", level: "высокий" },
+            { name: "нерка", level: "высокий" },
+            { name: "кижуч", level: "высокий" },
+            { name: "тунец", level: "высокий" },
+            { name: "скумбрия", level: "высокий" },
+            { name: "ставрида", level: "высокий" },
+            { name: "сардины", level: "высокий" },
+            { name: "анчоусы", level: "высокий" },
+            { name: "осётр", level: "высокий" },
+            { name: "белуга", level: "высокий" },
+            { name: "икра", level: "высокий" },
+            { name: "красная икра", level: "высокий" },
+            { name: "чёрная икра", level: "высокий" },
+            { name: "консервы рыбные", level: "высокий" },
+            { name: "шпроты", level: "высокий" },
+            { name: "килька", level: "высокий" },
+            { name: "мойва", level: "высокий" },
+            { name: "сельдь", level: "высокий" },
+            { name: "солёная рыба", level: "высокий" },
+            { name: "копчёная рыба", level: "высокий" },
+            { name: "вяленая рыба", level: "высокий" },
+            { name: "сушёная рыба", level: "высокий" },
+            { name: "креветки", level: "высокий" },
+            { name: "мидии", level: "высокий" },
+            { name: "кальмары", level: "высокий" },
+            { name: "осьминоги", level: "высокий" },
+            { name: "крабы", level: "высокий" },
+            { name: "крабовые палочки", level: "высокий" },
+            // Молочные продукты
+            { name: "творог", level: "низкий" },
+            { name: "творог свежий", level: "низкий" },
+            { name: "творог обезжиренный", level: "низкий" },
+            { name: "творожная масса", level: "низкий" },
+            { name: "сыр", level: "высокий" },
+            { name: "сыр твёрдый", level: "высокий" },
+            { name: "сыр мягкий", level: "высокий" },
+            { name: "сыр плавленый", level: "высокий" },
+            { name: "пармезан", level: "высокий" },
+            { name: "гауда", level: "высокий" },
+            { name: "эдам", level: "высокий" },
+            { name: "чеддер", level: "высокий" },
+            { name: "моцарелла", level: "средний" },
+            { name: "рикотта", level: "средний" },
+            { name: "фета", level: "высокий" },
+            { name: "брынза", level: "высокий" },
+            { name: "сулугуни", level: "высокий" },
+            { name: "адыгейский сыр", level: "средний" },
+            { name: "мацони", level: "высокий" },
+            { name: "молоко", level: "средний" },
+            { name: "молоко цельное", level: "средний" },
+            { name: "молоко обезжиренное", level: "средний" },
+            { name: "молоко топлёное", level: "средний" },
+            { name: "ряженка", level: "высокий" },
+            { name: "кефир", level: "высокий" },
+            { name: "йогурт", level: "средний" },
+            { name: "йогурт питьевой", level: "средний" },
+            { name: "йогурт натуральный", level: "средний" },
+            { name: "йогурт без добавок", level: "средний" },
+            { name: "сметана", level: "средний" },
+            { name: "сливки", level: "средний" },
+            { name: "масло сливочное", level: "низкий" },
+            { name: "маргарин", level: "средний" },
+            { name: "сгущёнка", level: "средний" },
+            { name: "сгущённое молоко", level: "средний" },
+            // Яйца
+            { name: "яйцо", level: "средний" },
+            { name: "яйца", level: "средний" },
+            { name: "куриное яйцо", level: "средний" },
+            { name: "яйцо куриное", level: "средний" },
+            { name: "яйцо перепелиное", level: "средний" },
+            { name: "яичный белок", level: "низкий" },
+            { name: "яичный желток", level: "средний" },
+            { name: "меланж", level: "средний" },
+            // Напитки
+            { name: "чай", level: "низкий" },
+            { name: "чёрный чай", level: "низкий" },
+            { name: "зелёный чай", level: "низкий" },
+            { name: "белый чай", level: "низкий" },
+            { name: "травяной чай", level: "низкий" },
+            { name: "ромашковый чай", level: "низкий" },
+            { name: "мятный чай", level: "низкий" },
+            { name: "имбирный чай", level: "низкий" },
+            { name: "компот", level: "низкий" },
+            { name: "морс", level: "низкий" },
+            { name: "квас", level: "высокий" },
+            { name: "кофе", level: "высокий" },
+            { name: "кофе растворимый", level: "высокий" },
+            { name: "кофе молотый", level: "высокий" },
+            { name: "какао", level: "высокий" },
+            { name: "шоколад", level: "высокий" },
+            { name: "вино", level: "высокий" },
+            { name: "красное вино", level: "высокий" },
+            { name: "белое вино", level: "высокий" },
+            { name: "игристое вино", level: "высокий" },
+            { name: "шампанское", level: "высокий" },
+            { name: "пиво", level: "высокий" },
+            { name: "тёмное пиво", level: "высокий" },
+            { name: "светлое пиво", level: "высокий" },
+            { name: "сидр", level: "высокий" },
+            { name: "виски", level: "высокий" },
+            { name: "водка", level: "средний" },
+            { name: "коньяк", level: "средний" },
+            { name: "ром", level: "средний" },
+            { name: "джин", level: "средний" },
+            { name: "ликёр", level: "средний" },
+            { name: "сок", level: "средний" },
+            { name: "сок яблочный", level: "средний" },
+            { name: "сок апельсиновый", level: "высокий" },
+            { name: "сок томатный", level: "высокий" },
+            { name: "газировка", level: "средний" },
+            { name: "кола", level: "средний" },
+            // Орехи, семена, сухофрукты
+            { name: "грецкий орех", level: "средний" },
+            { name: "грецкие орехи", level: "средний" },
+            { name: "миндаль", level: "средний" },
+            { name: "кешью", level: "средний" },
+            { name: "фундук", level: "средний" },
+            { name: "лесной орех", level: "средний" },
+            { name: "арахис", level: "средний" },
+            { name: "фисташки", level: "средний" },
+            { name: "кедровый орех", level: "средний" },
+            { name: "бразильский орех", level: "средний" },
+            { name: "тыквенные семечки", level: "низкий" },
+            { name: "подсолнечные семечки", level: "низкий" },
+            { name: "семечки", level: "низкий" },
+            { name: "семена льна", level: "низкий" },
+            { name: "льняное семя", level: "низкий" },
+            { name: "чиа", level: "низкий" },
+            { name: "семена чиа", level: "низкий" },
+            { name: "кунжут", level: "низкий" },
+            { name: "изюм", level: "высокий" },
+            { name: "курага", level: "высокий" },
+            { name: "чернослив", level: "высокий" },
+            { name: "финики", level: "высокий" },
+            { name: "инжир сушёный", level: "высокий" },
+            // Масла и жиры
+            { name: "оливковое масло", level: "низкий" },
+            { name: "масло оливковое", level: "низкий" },
+            { name: "кокосовое масло", level: "низкий" },
+            { name: "масло кокосовое", level: "низкий" },
+            { name: "подсолнечное масло", level: "низкий" },
+            { name: "масло подсолнечное", level: "низкий" },
+            { name: "кукурузное масло", level: "низкий" },
+            { name: "льняное масло", level: "низкий" },
+            { name: "масло виноградных косточек", level: "низкий" },
+            { name: "масло грецкого ореха", level: "низкий" },
+            // Специи и приправы
+            { name: "соль", level: "низкий" },
+            { name: "морская соль", level: "низкий" },
+            { name: "йодированная соль", level: "низкий" },
+            { name: "перец чёрный", level: "высокий" },
+            { name: "перец душистый", level: "высокий" },
+            { name: "перец красный", level: "высокий" },
+            { name: "перец кайенский", level: "высокий" },
+            { name: "паприка", level: "высокий" },
+            { name: "карри", level: "высокий" },
+            { name: "мускатный орех", level: "высокий" },
+            { name: "гвоздика", level: "средний" },
+            { name: "корица", level: "низкий" },
+            { name: "имбирь", level: "низкий" },
+            { name: "куркума", level: "низкий" },
+            { name: "орегано", level: "низкий" },
+            { name: "душица", level: "низкий" },
+            { name: "розмарин", level: "низкий" },
+            { name: "тимьян", level: "низкий" },
+            { name: "чабрец", level: "низкий" },
+            { name: "шалфей", level: "низкий" },
+            { name: "эстрагон", level: "низкий" },
+            { name: "тархун", level: "низкий" },
+            { name: "лавровый лист", level: "низкий" },
+            // Соусы
+            { name: "кетчуп", level: "высокий" },
+            { name: "майонез", level: "высокий" },
+            { name: "соевый соус", level: "высокий" },
+            { name: "уксус", level: "высокий" },
+            { name: "бальзамический уксус", level: "высокий" },
+            { name: "яблочный уксус", level: "высокий" },
+            { name: "винный уксус", level: "высокий" },
+            { name: "горчица", level: "высокий" },
+            { name: "хрен", level: "высокий" },
+            { name: "аджика", level: "высокий" },
+            { name: "чили соус", level: "высокий" },
+            { name: "томатная паста", level: "высокий" },
+            { name: "паста томатная", level: "высокий" },
+            // Сладости
+            { name: "мёд", level: "средний" },
+            { name: "мед", level: "средний" },
+            { name: "варенье", level: "средний" },
+            { name: "джем", level: "средний" },
+            { name: "конфитюр", level: "средний" },
+            { name: "сахар", level: "низкий" },
+            { name: "сахарный песок", level: "низкий" },
+            { name: "рафинад", level: "низкий" },
+            { name: "шоколад", level: "высокий" },
+            { name: "шоколад молочный", level: "высокий" },
+            { name: "шоколад горький", level: "высокий" },
+            { name: "карамель", level: "средний" },
+            { name: "мармелад", level: "средний" },
+            { name: "зефир", level: "средний" },
+            { name: "пастила", level: "средний" },
+            { name: "халва", level: "средний" },
+            { name: "печенье", level: "средний" },
+            { name: "пряники", level: "средний" },
+            { name: "вафли", level: "средний" },
+            { name: "кекс", level: "средний" },
+            { name: "торт", level: "средний" },
+            { name: "пирожное", level: "средний" },
+            { name: "мороженое", level: "высокий" },
+            // Готовые блюда
+            { name: "пельмени", level: "средний" },
+            { name: "вареники", level: "средний" },
+            { name: "манты", level: "средний" },
+            { name: "чебуреки", level: "средний" },
+            { name: "блины", level: "средний" },
+            { name: "оладьи", level: "средний" },
+            { name: "сырники", level: "средний" },
+            { name: "запеканка", level: "средний" },
+            { name: "пицца", level: "высокий" },
+            { name: "суши", level: "высокий" },
+            { name: "роллы", level: "высокий" },
+            { name: "бургер", level: "высокий" },
+            { name: "шаурма", level: "высокий" },
+            { name: "плов", level: "средний" },
+            { name: "лапша", level: "средний" }
+        ];
 
         // ----- СПИСОК СИМПТОМОВ -----
         const symptomsList = [
@@ -709,9 +708,12 @@
             { id: "bloating", name: "💨 Вздутие живота" }
         ];
 
+        // ---- ПЕРЕМЕННЫЕ ----
         let userLogs = JSON.parse(localStorage.getItem('histolite_logs')) || [];
         let savedLastPeriodStart = localStorage.getItem('histolite_last_period_start') || '';
-        let savedCycleLength = localStorage.getItem('histolite_cycle_length') || 28; let savedPmsStartDays = localStorage.getItem('histolite_pms_start_days') || 7;
+        let savedCycleLength = localStorage.getItem('histolite_cycle_length') || 28;
+        let savedPmsStartDays = localStorage.getItem('histolite_pms_start_days') || 7;
+        let userGender = localStorage.getItem('histolite_gender') || 'female';
 
         // ---- ФУНКЦИИ ДЛЯ РАБОТЫ С ЦИКЛОМ ----
         function getCurrentCycleDay() {
@@ -726,17 +728,15 @@
             return diffDays;
         }
 
-                function getCyclePhaseName(day) {
+        function getCyclePhaseName(day) {
             if (day === null || day > savedCycleLength) return "Вне цикла";
             const len = savedCycleLength;
-            // Овуляция обычно происходит за 14 дней до конца цикла
             const ovulationDay = len - 14;
-            // ПМС начинается за 5 дней до конца
-           const pmsStart = len - savedPmsStartDays;
+            const pmsStart = len - savedPmsStartDays;
 
             if (day <= 5) return "Начало цикла";
             if (day >= 6 && day < ovulationDay) return "Фолликулярная";
-            if (day >= ovulationDay && day <= ovulationDay + 1) return "Овуляция"; // даём 2 дня на овуляцию
+            if (day >= ovulationDay && day <= ovulationDay + 1) return "Овуляция";
             if (day > ovulationDay + 1 && day < pmsStart) return "Лютеиновая";
             if (day >= pmsStart) return "ПМС";
             return "—";
@@ -773,7 +773,7 @@
             badge.innerText = phase;
             badge.className = `p-2 rounded-xl text-xs font-bold text-center border ${getPhaseColor(phase)}`;
 
-                        let advice = '';
+            let advice = '';
             let adviceColor = 'text-slate-600';
             if (phase === "Овуляция" || phase === "ПМС") {
                 advice = '⚠️ Повышенная чувствительность. Выбирайте зелёные продукты.';
@@ -786,8 +786,9 @@
                 adviceColor = 'text-emerald-700';
             }
             forecast.innerHTML = `<p class="text-xs text-slate-600"><strong>Текущая фаза: ${phase}</strong></p><p class="text-xs ${adviceColor} mt-1">${advice}</p>`;
-  }
-                function saveCycleSettings() {
+        }
+
+        function saveCycleSettings() {
             const dateInput = document.getElementById('last-period-start');
             const lengthInput = document.getElementById('cycle-length');
             const pmsInput = document.getElementById('pms-start-days');
@@ -800,7 +801,7 @@
             updateCycleUI();
         }
 
-        // ---- ЮРИДИЧЕСКИЙ ЭКРАН ----
+        // ---- ЮРИДИЧЕСКИЙ ЭКРАН И ВЫБОР ПОЛА ----
         function toggleLegalButton() {
             var chk = document.getElementById('legal-checkbox');
             var btn = document.getElementById('legal-submit-btn');
@@ -814,41 +815,61 @@
         }
 
         window.acceptLegal = function() {
+            const genderRadio = document.querySelector('input[name="gender"]:checked');
+            userGender = genderRadio ? genderRadio.value : 'female';
+            localStorage.setItem('histolite_gender', userGender);
+
             localStorage.setItem('histolite_legal_accepted', 'true');
             document.getElementById('legal-modal').style.display = 'none';
             document.getElementById('app-body').classList.remove('opacity-30', 'pointer-events-none');
+
             renderHistory();
             updateCycleUI();
+
+            // Настройка календаря
             const dateInput = document.getElementById('last-period-start');
             const lengthInput = document.getElementById('cycle-length');
+            const pmsInput = document.getElementById('pms-start-days');
             if (savedLastPeriodStart) dateInput.value = savedLastPeriodStart;
+            if (savedPmsStartDays) pmsInput.value = savedPmsStartDays;
             dateInput.addEventListener('change', saveCycleSettings);
             lengthInput.addEventListener('change', saveCycleSettings);
-                        const pmsInput = document.getElementById('pms-start-days');
-            if (savedPmsStartDays) pmsInput.value = savedPmsStartDays;
             pmsInput.addEventListener('change', saveCycleSettings);
-                           
+
+            // Скрыть календарь для мужчин
+            if (userGender === 'male') {
+                document.getElementById('calendar-nav-btn').style.display = 'none';
+                if (document.getElementById('calendar-tab').classList.contains('active')) {
+                    switchTab('diary');
+                }
+            } else {
+                document.getElementById('calendar-nav-btn').style.display = 'flex';
+            }
         };
 
-       
         // ---- СОХРАНЕНИЕ ЗАПИСИ ----
         window.saveLog = function() {
             const date = document.getElementById('log-date').value;
             const time = document.getElementById('log-time').value;
             if (!date) { showModal('Укажите дату'); return; }
 
-            const cycleDay = getCurrentCycleDay();
-            if (cycleDay === null || !savedLastPeriodStart) {
-                showModal('Сначала настройте календарь цикла (укажите дату начала менструации).');
-                return;
+            // Для женщин проверяем календарь, для мужчин — пропускаем
+            if (userGender !== 'male') {
+                const cycleDay = getCurrentCycleDay();
+                if (cycleDay === null || !savedLastPeriodStart) {
+                    showModal('Сначала настройте календарь цикла (укажите дату начала менструации).');
+                    return;
+                }
             }
 
-                        const customRaw = document.getElementById('custom-products').value;
+            const customRaw = document.getElementById('custom-products').value;
             let allProducts = customRaw.trim() ? customRaw.split(',').map(s=>s.trim()).filter(s=>s) : [];
             const medsRaw = document.getElementById('medications').value;
             let medications = medsRaw.trim() ? medsRaw.split(',').map(s=>s.trim()).filter(s=>s) : [];
             if (allProducts.length === 0 && medications.length === 0) { showModal('Выберите/введите продукты или лекарства'); return; }
             const symptomsText = document.getElementById('symptoms-text-input').value.trim();
+
+            const cycleDay = (userGender === 'male') ? 0 : getCurrentCycleDay();
 
             userLogs = userLogs.filter(l => !(l.date === date && l.time === time));
             userLogs.push({ date, time, cycleDay, products: allProducts, medications, symptomsText });
@@ -870,6 +891,7 @@
             container.innerHTML = sorted.slice(0,5).map(log => {
                 const symps = log.symptomsText || 'не указаны';
                 const meds = log.medications && log.medications.length ? `💊 ${log.medications.join(', ')}` : '';
+                const cycleInfo = log.cycleDay > 0 ? `🌸 День цикла: ${log.cycleDay}` : '';
                 return `<div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 space-y-1">
                     <div class="flex justify-between items-center">
                         <div class="font-bold text-[10px] text-slate-400">📅 ${log.date} | ⏰ ${log.time}</div>
@@ -881,12 +903,11 @@
                     <div class="text-slate-700 text-xs">🍎 Рацион: ${log.products.join(', ') || '—'}</div>
                     ${meds ? `<div class="text-purple-700 text-xs">${meds}</div>` : ''}
                     <div class="text-amber-600 text-xs">📝 Симптомы: ${symps}</div>
-                    <div class="text-teal-600 text-[10px]">🌸 День цикла: ${log.cycleDay}</div>
+                    ${cycleInfo ? `<div class="text-teal-600 text-[10px]">${cycleInfo}</div>` : ''}
                 </div>`;
             }).join('');
         };
 
-        // ---- РЕДАКТИРОВАНИЕ ЗАПИСИ ----
         window.editLog = function(date, time) {
             const log = userLogs.find(l => l.date === date && l.time === time);
             if (!log) return;
@@ -898,21 +919,20 @@
             document.querySelector('.bg-white.p-4.rounded-2xl.shadow-sm.border').scrollIntoView({ behavior: 'smooth' });
         };
 
-        // ---- УДАЛЕНИЕ ----
-        window.deleteLog = function(date,time) { 
-            userLogs = userLogs.filter(l=>!(l.date===date && l.time===time)); 
-            localStorage.setItem('histolite_logs',JSON.stringify(userLogs)); 
-            renderHistory(); 
+        window.deleteLog = function(date,time) {
+            userLogs = userLogs.filter(l=>!(l.date===date && l.time===time));
+            localStorage.setItem('histolite_logs',JSON.stringify(userLogs));
+            renderHistory();
         };
-        window.clearAllLogs = function() { 
-            if(confirm('Удалить все записи?')){ 
-                userLogs=[]; 
-                localStorage.setItem('histolite_logs','[]'); 
-                renderHistory(); 
-            } 
+        window.clearAllLogs = function() {
+            if(confirm('Удалить все записи?')){
+                userLogs=[];
+                localStorage.setItem('histolite_logs','[]');
+                renderHistory();
+            }
         };
 
-        // ---- ПОИСК ПРОДУКТА ПО НАЗВАНИЮ (вкладка Продукты) ----
+        // ---- ПОИСК ПРОДУКТА ----
         window.searchProductByName = function() {
             const input = document.getElementById('product-search-input');
             const query = input.value.trim().toLowerCase();
@@ -921,12 +941,10 @@
             resultDiv.classList.remove('hidden', 'low', 'medium', 'high', 'unknown');
             resultDiv.innerHTML = '';
 
-            // Ищем в myHistamineDB по ключевым словам
-            const foundItems = myHistamineDB.filter(item => 
+            const foundItems = myHistamineDB.filter(item =>
                 item.name.includes(query) || query.includes(item.name)
             );
             if (foundItems.length > 0) {
-                // Берём первый найденный (можно улучшить, показывая все)
                 const found = foundItems[0];
                 let levelClass = '';
                 let statusText = '';
@@ -943,14 +961,12 @@
                 resultDiv.className = `product-result ${levelClass} text-sm`;
                 resultDiv.innerHTML = `<strong>${found.name.charAt(0).toUpperCase() + found.name.slice(1)}</strong><br>${statusText}`;
             } else {
-                // Если не нашли в своей базе, пробуем Open Food Facts (по штрих-коду не можем, но можно сделать запрос по названию)
-                // Для простоты показываем "не найден"
                 resultDiv.className = 'product-result unknown text-sm';
                 resultDiv.innerHTML = `<strong>${query}</strong><br>🟡 Статус не определён. Проверьте состав вручную или используйте сканер штрих-кода.`;
             }
         };
 
-        // ---- СКАНЕР ДЛЯ ВКЛАДКИ ПРОДУКТЫ ----
+        // ---- СКАНЕР ----
         let html5QrCodeSearch = null;
         window.scanBarcodeForSearch = function() {
             const container = document.getElementById('scanner-search-container');
@@ -968,15 +984,13 @@
 
         function onSearchScanSuccess(decodedText) {
             stopSearchScanner();
-            // Ищем продукт по штрих-коду в Open Food Facts и показываем результат во вкладке
             fetch(`https://world.openfoodfacts.org/api/v2/product/${decodedText}.json`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 1 && data.product) {
                         const product = data.product;
                         let productName = product.product_name_ru || product.product_name || 'Неизвестный продукт';
-                        // Ищем в нашей базе по названию
-                        const found = myHistamineDB.find(item => 
+                        const found = myHistamineDB.find(item =>
                             item.name.includes(productName.toLowerCase()) || productName.toLowerCase().includes(item.name)
                         );
                         const resultDiv = document.getElementById('product-search-result');
@@ -993,7 +1007,6 @@
                             resultDiv.className = 'product-result unknown text-sm';
                             resultDiv.innerHTML = `<strong>${productName}</strong><br>🟡 Статус не определён. Проверьте состав вручную.`;
                         }
-                        // Автозаполнение поля поиска для удобства
                         document.getElementById('product-search-input').value = productName;
                     } else {
                         showModal('❌ Продукт не найден по штрих-коду.');
@@ -1015,6 +1028,59 @@
                 document.getElementById('scanner-search-container').style.display = 'none';
             }
         };
+
+        function scanBarcode() {
+            scanBarcodeForSearch();
+        }
+
+        function stopScanner() {
+            stopSearchScanner();
+        }
+
+        function uploadBarcodeImage() {
+            document.getElementById('barcode-image-input').click();
+        }
+
+        function decodeBarcodeFromImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const btn = document.querySelector('button[onclick="uploadBarcodeImage()"]');
+            const originalText = btn ? btn.innerText : '📤 Загрузить фото';
+            if (btn) {
+                btn.innerText = '⏳ Обработка...';
+                btn.disabled = true;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const codeReader = new Html5Qrcode();
+                    codeReader.decodeFromImage(img)
+                        .then(decodedText => {
+                            if (btn) {
+                                btn.innerText = originalText;
+                                btn.disabled = false;
+                            }
+                            onSearchScanSuccess(decodedText);
+                        })
+                        .catch(err => {
+                            console.error('Ошибка декодирования:', err);
+                            showModal('Не удалось распознать штрих-код на изображении. Попробуйте другое фото.');
+                            if (btn) {
+                                btn.innerText = originalText;
+                                btn.disabled = false;
+                            }
+                        })
+                        .finally(() => {
+                            input.value = '';
+                        });
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
 
         // ---- АНАЛИТИКА ----
         window.runAdvancedAnalytics = function() {
@@ -1051,7 +1117,7 @@
 
         function renderCycleSymptomAnalysis() {
             const container = document.getElementById('cycle-symptom-analysis');
-            if (!userLogs.length) { container.innerHTML = '<div class="text-center text-slate-400 p-4">Нет данных</div>'; return; }
+            if (!userLogs.length || userGender === 'male') { container.innerHTML = '<div class="text-center text-slate-400 p-4">Нет данных</div>'; return; }
             const phases = ["Начало цикла","Фолликулярная","Овуляция","Лютеиновая","ПМС"];
             const phaseData = {};
             phases.forEach(p=>phaseData[p]={count:0, withSymptoms:0, productFreq:{}});
@@ -1079,7 +1145,7 @@
 
         function renderCycleLoadCalendar() {
             const container = document.getElementById('cycle-load-calendar');
-            if (!userLogs.length) { container.innerHTML = '<div class="text-center text-slate-400 p-4">Нет данных</div>'; return; }
+            if (!userLogs.length || userGender === 'male') { container.innerHTML = '<div class="text-center text-slate-400 p-4">Нет данных</div>'; return; }
             const phases = ["Начало цикла","Фолликулярная","Овуляция","Лютеиновая","ПМС"];
             const phaseData = {};
             phases.forEach(p=>phaseData[p]={count:0, withSymptoms:0});
@@ -1111,8 +1177,8 @@
             if(!userLogs.length) { showModal('Нет записей'); return; }
             let rows = [['Дата','Время','День цикла','Фаза','Продукты','Лекарства','Симптомы']];
             userLogs.forEach(log => {
-                const phase = getCyclePhaseName(log.cycleDay);
-                rows.push([log.date, log.time, log.cycleDay, phase, log.products.join(', '), (log.medications||[]).join(', '), log.symptomsText || '']);
+                const phase = (log.cycleDay > 0) ? getCyclePhaseName(log.cycleDay) : '—';
+                rows.push([log.date, log.time, log.cycleDay || '—', phase, log.products.join(', '), (log.medications||[]).join(', '), log.symptomsText || '']);
             });
             const csv = rows.map(row=>row.map(cell=>`"${cell}"`).join(',')).join('\n');
             const blob = new Blob(["\uFEFF"+csv], {type:'text/csv;charset=utf-8;'});
@@ -1141,139 +1207,79 @@
                 document.getElementById('app-body').classList.remove('opacity-30', 'pointer-events-none');
                 renderHistory();
                 updateCycleUI();
+
+                // Восстановление настроек календаря
                 const dateInput = document.getElementById('last-period-start');
                 const lengthInput = document.getElementById('cycle-length');
+                const pmsInput = document.getElementById('pms-start-days');
                 if (savedLastPeriodStart) dateInput.value = savedLastPeriodStart;
+                if (savedPmsStartDays) pmsInput.value = savedPmsStartDays;
                 dateInput.addEventListener('change', saveCycleSettings);
                 lengthInput.addEventListener('change', saveCycleSettings);
-                                const pmsInput = document.getElementById('pms-start-days');
-                if (savedPmsStartDays) pmsInput.value = savedPmsStartDays;
                 pmsInput.addEventListener('change', saveCycleSettings);
+
+                // Скрыть календарь для мужчин
+                if (userGender === 'male') {
+                    document.getElementById('calendar-nav-btn').style.display = 'none';
+                } else {
+                    document.getElementById('calendar-nav-btn').style.display = 'flex';
+                }
             } else {
                 document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
                 document.getElementById('log-time').value = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                const dateInput = document.getElementById('last-period-start');
-                const lengthInput = document.getElementById('cycle-length');
-                if (savedLastPeriodStart) dateInput.value = savedLastPeriodStart;
-                dateInput.addEventListener('change', saveCycleSettings);
-                lengthInput.addEventListener('change', saveCycleSettings);
-                                const pmsInput = document.getElementById('pms-start-days');
-                if (savedPmsStartDays) pmsInput.value = savedPmsStartDays;
-                pmsInput.addEventListener('change', saveCycleSettings);
             }
         })();
-       // ---- ГОЛОСОВОЙ ВВОД ----
-let recognition = null;
 
-function startVoiceInput(fieldId) {
-    // Проверка поддержки браузером
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        showModal('Ваш браузер не поддерживает голосовой ввод. Используйте Chrome или Edge.');
-        return;
-    }
+        // ---- ГОЛОСОВОЙ ВВОД ----
+        let recognition = null;
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SpeechRecognition();
-    recognition.lang = 'ru-RU';
-    recognition.continuous = false;
-    recognition.interimResults = true;
-
-    recognition.onresult = function(event) {
-        let finalText = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-            const transcript = event.results[i][0].transcript;
-            if (event.results[i].isFinal) {
-                finalText += transcript;
-            } else {
-                // Промежуточные результаты (можно показать, но мы просто добавим в конец)
-                // Для простоты добавим всё сразу
+        function startVoiceInput(fieldId) {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                showModal('Ваш браузер не поддерживает голосовой ввод. Используйте Chrome или Edge.');
+                return;
             }
-        }
-        if (finalText) {
-            const input = document.getElementById(fieldId);
-            if (input) {
-                // Если в поле уже что-то есть, добавим через запятую
-                if (input.value.trim()) {
-                    input.value += ', ' + finalText.trim();
-                } else {
-                    input.value = finalText.trim();
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ru-RU';
+            recognition.continuous = false;
+            recognition.interimResults = true;
+
+            recognition.onresult = function(event) {
+                let finalText = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalText += transcript;
+                    }
                 }
-            }
-        }
-    };
-
-    recognition.onerror = function(event) {
-        console.error('Ошибка распознавания:', event.error);
-        showModal('Ошибка распознавания: ' + event.error + '. Попробуйте ещё раз.');
-    };
-
-    recognition.onend = function() {
-        console.log('Голосовой ввод завершён');
-        // Кнопка становится активной снова (можно по таймеру)
-    };
-
-    recognition.start();
-} 
-                // ---- СКАНИРОВАНИЕ ШТРИХ-КОДА КАМЕРОЙ (ОБЁРТКА) ----
-        function scanBarcode() {
-            // Используем существующую функцию для вкладки "Продукты"
-            scanBarcodeForSearch();
-        }
-
-        // ---- ОСТАНОВКА СКАНЕРА (ОБЁРТКА) ----
-        function stopScanner() {
-            stopSearchScanner();
-        }
-
-        // ---- РАСПОЗНАВАНИЕ ШТРИХ-КОДА ИЗ ИЗОБРАЖЕНИЯ ----
-        function uploadBarcodeImage() {
-            document.getElementById('barcode-image-input').click();
-        }
-
-        function decodeBarcodeFromImage(input) {
-            const file = input.files[0];
-            if (!file) return;
-
-            const btn = document.querySelector('button[onclick="uploadBarcodeImage()"]');
-            const originalText = btn ? btn.innerText : '📤 Загрузить фото';
-            if (btn) {
-                btn.innerText = '⏳ Обработка...';
-                btn.disabled = true;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const codeReader = new Html5Qrcode();
-                    codeReader.decodeFromImage(img)
-                        .then(decodedText => {
-                            if (btn) {
-                                btn.innerText = originalText;
-                                btn.disabled = false;
-                            }
-                            // Используем существующую функцию для поиска продукта
-                            onSearchScanSuccess(decodedText);
-                        })
-                        .catch(err => {
-                            console.error('Ошибка декодирования:', err);
-                            showModal('Не удалось распознать штрих-код на изображении. Попробуйте другое фото.');
-                            if (btn) {
-                                btn.innerText = originalText;
-                                btn.disabled = false;
-                            }
-                        })
-                        .finally(() => {
-                            input.value = '';
-                        });
-                };
-                img.src = e.target.result;
+                if (finalText) {
+                    const input = document.getElementById(fieldId);
+                    if (input) {
+                        if (input.value.trim()) {
+                            input.value += ', ' + finalText.trim();
+                        } else {
+                            input.value = finalText.trim();
+                        }
+                    }
+                }
             };
-            reader.readAsDataURL(file);
+
+            recognition.onerror = function(event) {
+                console.error('Ошибка распознавания:', event.error);
+                showModal('Ошибка распознавания: ' + event.error + '. Попробуйте ещё раз.');
+            };
+
+            recognition.onend = function() {
+                console.log('Голосовой ввод завершён');
+            };
+
+            recognition.start();
         }
-                // ---- МОДАЛЬНОЕ ОКНО ДЛЯ СООБЩЕНИЙ ----
+
+        // ---- МОДАЛЬНОЕ ОКНО ----
         function showModal(message) {
-           document.getElementById('custom-modal-message').innerText = message;
+            document.getElementById('custom-modal-message').innerText = message;
             document.getElementById('custom-modal').style.display = 'flex';
         }
 
@@ -1281,5 +1287,13 @@ function startVoiceInput(fieldId) {
             document.getElementById('custom-modal').style.display = 'none';
         }
     </script>
+
+    <!-- Модальное окно -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display:none;">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100">
+            <p id="custom-modal-message" class="text-center text-sm text-slate-700 mb-4">Сообщение</p>
+            <button onclick="closeModal()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-xl transition text-sm">OK</button>
+        </div>
+    </div>
 </body>
 </html>
