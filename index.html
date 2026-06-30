@@ -1033,5 +1033,159 @@
         <div id="recipe-modal-tips" class="mt-3 p-3 bg-amber-50 rounded-xl text-sm text-amber-800 border border-amber-200"></div>
     </div>
 </div>
+// ============================================================
+// НОВЫЙ КОД ДЛЯ РАБОТЫ С РЕЦЕПТАМИ
+// ============================================================
+
+let recipesDB = [];
+let userRecipes = JSON.parse(localStorage.getItem('histolite_user_recipes')) || [];
+
+// Функция загрузки рецептов из JSON-файла
+async function loadRecipes() {
+    try {
+        const response = await fetch('recipes.json');
+        if (!response.ok) throw new Error('Файл рецептов не найден');
+        recipesDB = await response.json();
+        renderRecipes();
+    } catch (error) {
+        console.warn('Не удалось загрузить recipes.json, используем только пользовательские', error);
+        recipesDB = [];
+        renderRecipes();
+    }
+}
+
+// Функция отображения карточек рецептов
+function renderRecipes() {
+    const container = document.getElementById('recipes-container');
+    if (!container) return;
+    const allRecipes = [...recipesDB, ...userRecipes];
+    
+    // Считываем активные фильтры
+    const categoryFilter = document.querySelector('.recipe-filter-btn.active')?.dataset.category || 'all';
+    const levelFilter = document.querySelector('.level-filter-btn.active')?.dataset.level || 'all';
+    const gf = document.getElementById('filter-gluten-free')?.checked || false;
+    const lf = document.getElementById('filter-lactose-free')?.checked || false;
+    const df = document.getElementById('filter-dairy-free')?.checked || false;
+    
+    let filtered = allRecipes.filter(r => {
+        let matchCategory = categoryFilter === 'all' || r.category === categoryFilter;
+        let matchLevel = levelFilter === 'all' || r.histamine_level === levelFilter;
+        let matchDiet = true;
+        if (gf) matchDiet = matchDiet && (r.gluten_free === true);
+        if (lf) matchDiet = matchDiet && (r.lactose_free === true);
+        if (df) matchDiet = matchDiet && (r.dairy_free === true);
+        return matchCategory && matchLevel && matchDiet;
+    });
+    
+    if (filtered.length === 0) {
+        container.innerHTML = '<p class="text-center text-slate-400 col-span-full py-8">По вашему запросу ничего не найдено.</p>';
+        return;
+    }
+    
+    container.innerHTML = filtered.map(r => `
+        <div class="border border-slate-200 rounded-xl p-3 bg-white hover:shadow-md transition cursor-pointer" onclick="openRecipeModal(${r.id})">
+            <img src="${r.image || 'https://via.placeholder.com/300x200?text=Рецепт'}" alt="${r.name}" class="w-full h-32 object-cover rounded-lg mb-2" onerror="this.src='https://via.placeholder.com/300x200?text=Изображение+отсутствует'">
+            <h4 class="font-bold text-sm text-slate-800">${r.name}</h4>
+            <div class="flex justify-between text-xs text-slate-500 mt-1">
+                <span>${r.category}</span>
+                <span>⏱ ${r.prep_time} мин</span>
+            </div>
+            <div class="mt-1 flex items-center gap-1 flex-wrap">
+                <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100">
+                    ${r.histamine_level === 'низкий' ? '🟢 Низкий' : r.histamine_level === 'средний' ? '🟡 Средний' : '🔴 Высокий'}
+                </span>
+                ${r.gluten_free ? '<span class="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">🌾 БГ</span>' : ''}
+                ${r.lactose_free ? '<span class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">🥛 БЛ</span>' : ''}
+                ${r.dairy_free ? '<span class="text-xs px-2 py-0.5 rounded-full bg-purple-50 text-purple-700">🧈 БМ</span>' : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Открытие модального окна с деталями рецепта
+function openRecipeModal(id) {
+    const allRecipes = [...recipesDB, ...userRecipes];
+    const recipe = allRecipes.find(r => r.id === id);
+    if (!recipe) return;
+    
+    document.getElementById('recipe-modal-image').src = recipe.image || 'https://via.placeholder.com/400x300?text=Рецепт';
+    document.getElementById('recipe-modal-name').textContent = recipe.name;
+    document.getElementById('recipe-modal-category').textContent = recipe.category;
+    document.getElementById('recipe-modal-level').textContent = recipe.histamine_level === 'низкий' ? '🟢 Низкий' : recipe.histamine_level === 'средний' ? '🟡 Средний' : '🔴 Высокий';
+    document.getElementById('recipe-modal-time').textContent = `⏱ ${recipe.prep_time} мин`;
+    document.getElementById('recipe-modal-servings').textContent = `🍽 ${recipe.servings} порц.`;
+    document.getElementById('recipe-modal-description').textContent = recipe.description;
+    
+    const ingList = document.getElementById('recipe-modal-ingredients');
+    ingList.innerHTML = recipe.ingredients.map(i => `<li>${i}</li>`).join('');
+    
+    document.getElementById('recipe-modal-instructions').textContent = recipe.instructions;
+    
+    const tipsDiv = document.getElementById('recipe-modal-tips');
+    if (recipe.tips) {
+        tipsDiv.innerHTML = `<strong>💡 Совет:</strong> ${recipe.tips}`;
+        tipsDiv.style.display = 'block';
+    } else {
+        tipsDiv.style.display = 'none';
+    }
+    
+    const dietsDiv = document.getElementById('recipe-modal-diets');
+    dietsDiv.innerHTML = '';
+    if (recipe.gluten_free) dietsDiv.innerHTML += '<span class="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">🌾 Без глютена</span> ';
+    if (recipe.lactose_free) dietsDiv.innerHTML += '<span class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">🥛 Без лактозы</span> ';
+    if (recipe.dairy_free) dietsDiv.innerHTML += '<span class="text-xs px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">🧈 Без молочных продуктов</span> ';
+    if (!recipe.gluten_free && !recipe.lactose_free && !recipe.dairy_free) {
+        dietsDiv.innerHTML = '<span class="text-xs text-slate-400">Нет специальных маркеров</span>';
+    }
+    
+    document.getElementById('recipe-modal').style.display = 'flex';
+}
+
+function closeRecipeModal() {
+    document.getElementById('recipe-modal').style.display = 'none';
+}
+
+// Обработчики кликов для фильтров (категория)
+document.querySelectorAll('.recipe-filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.recipe-filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        renderRecipes();
+    });
+});
+
+// Обработчики кликов для фильтров (уровень)
+document.querySelectorAll('.level-filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.level-filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        renderRecipes();
+    });
+});
+
+// Закрытие модального окна при клике вне его области
+document.getElementById('recipe-modal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeRecipeModal();
+});
+
+// Загружаем рецепты при старте (вызов внутри init или после DOM)
+// Для совместимости с существующим кодом добавим вызов в функцию init, если она есть,
+// или просто вызовем после объявления всех функций.
+// Вам нужно найти место, где инициализируется приложение (например, после принятия юридического соглашения)
+// и добавить туда строчку loadRecipes();
+
+// Если у вас уже есть функция инициализации (например, initApp или acceptLegal),
+// вставьте туда loadRecipes();. Если нет — просто добавьте в конце скрипта:
+// loadRecipes();
+
+// Но чтобы не сломать существующий код, я добавлю отложенный вызов через DOMContentLoaded,
+// если он ещё не используется. Если у вас уже есть DOMContentLoaded, можно добавить туда.
+// Я проверю, есть ли уже такой обработчик, и если нет, добавлю.
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadRecipes);
+} else {
+    // Если страница уже загружена, вызываем сразу (но аккуратно, чтобы не дублировать)
+    setTimeout(loadRecipes, 100);
+}
 </body>
 </html>
