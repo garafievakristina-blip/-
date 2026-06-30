@@ -54,7 +54,6 @@
             font-size: 24px;
             font-weight: 700;
         }
-        /* Стили для базы продуктов */
         .product-status-btn {
             width: 32px;
             height: 32px;
@@ -76,6 +75,52 @@
         .safe-filter-btn.active { background: #10b981; color: white; border-color: #10b981; }
         .safe-filter-btn.unsafe-active { background: #ef4444; color: white; border-color: #ef4444; }
         .safe-filter-btn.question-active { background: #f59e0b; color: white; border-color: #f59e0b; }
+        /* Стили для чипсов */
+        .chip-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+            min-height: 42px;
+            align-items: center;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 500;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+        }
+        .chip-safe { border-color: #4ade80; background: #dcfce7; color: #166534; }
+        .chip-unsafe { border-color: #f87171; background: #fee2e2; color: #991b1b; }
+        .chip-question { border-color: #facc15; background: #fef9c3; color: #854d0e; }
+        .chip-unknown { border-color: #cbd5e1; background: #f1f5f9; color: #475569; }
+        .chip-remove {
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            margin-left: 2px;
+        }
+        .chip-remove:hover { opacity: 1; }
+        .chip-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 14px;
+            flex: 1;
+            min-width: 80px;
+            color: #0f172a;
+        }
+        .chip-input::placeholder { color: #94a3b8; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen pb-24">
@@ -122,7 +167,7 @@
         </header>
 
         <main class="max-w-md mx-auto p-4 space-y-4">
-            <!-- ВКЛАДКА СЕГОДНЯ -->
+            <!-- ВКЛАДКА СЕГОДНЯ (без изменений) -->
             <div id="today-tab" class="tab-content active space-y-4">
                 <div id="today-dashboard">
                     <div id="risk-card" class="risk-card risk-low">
@@ -144,7 +189,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА ДНЕВНИК (без изменений) -->
+            <!-- ВКЛАДКА ДНЕВНИК с чипсами -->
             <div id="diary-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h2 class="text-base font-bold mb-3 text-slate-800">📝 Новая запись</h2>
@@ -152,17 +197,22 @@
                         <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Дата</label><input type="date" id="log-date" class="w-full p-2 border border-slate-200 rounded-xl text-xs bg-slate-50"></div>
                         <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Время</label><input type="time" id="log-time" class="w-full p-2 border border-slate-200 rounded-xl text-xs bg-slate-50"></div>
                     </div>
+
+                    <!-- Блок для чипсов продуктов -->
                     <div class="mb-4">
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Введите продукты (через запятую):</label>
-                        <div class="flex gap-2 items-center">
-                            <input type="text" id="custom-products" placeholder="например: курица, рис, кабачок" class="flex-1 p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
-                            <button onclick="startVoiceInput('custom-products')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold p-2 rounded-xl transition text-sm" title="Голосовой ввод">🎤</button>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Добавьте продукты:</label>
+                        <div class="chip-container" id="chip-container">
+                            <div id="chips-wrapper" style="display: inline-flex; flex-wrap: wrap; gap: 6px; align-items: center;"></div>
+                            <input type="text" id="chip-input" class="chip-input" placeholder="Напишите продукт и нажмите Enter" autocomplete="off">
                         </div>
+                        <div class="text-[10px] text-slate-400 mt-1">Цвет чипса показывает статус в вашей базе «Можно / Нельзя».</div>
                     </div>
+
                     <div class="mb-4">
                         <label class="block text-xs font-bold text-slate-600 mb-1">💊 Принятые лекарства (через запятую):</label>
                         <input type="text" id="medications" placeholder="цетиризин 10мг, дао-форте" class="w-full p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
                     </div>
+
                     <div class="space-y-2 border-t border-slate-100 pt-3">
                         <label class="block text-xs font-bold text-slate-600 mb-1">📝 Какие симптомы вы испытываете? (через запятую)</label>
                         <div class="flex gap-2 items-center">
@@ -171,8 +221,10 @@
                         </div>
                         <p class="text-[10px] text-slate-400 mt-1">Нажмите на микрофон и скажите текст.</p>
                     </div>
+
                     <button onclick="saveLog()" class="w-full mt-5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-lg text-sm">Сохранить запись</button>
                 </div>
+
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Последние записи</h3>
@@ -182,7 +234,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА ПРОДУКТЫ (поиск) -->
+            <!-- ВКЛАДКА ПРОДУКТЫ (поиск) (без изменений) -->
             <div id="products-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h2 class="text-base font-bold mb-3 text-slate-800">🔍 Узнать уровень гистамина</h2>
@@ -206,7 +258,7 @@
                 </div>
             </div>
 
-            <!-- НОВАЯ ВКЛАДКА: БАЗА "МОЖНО / НЕЛЬЗЯ" -->
+            <!-- ВКЛАДКА БАЗА (можно / нельзя) (без изменений) -->
             <div id="safe-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h2 class="text-base font-bold mb-3 text-slate-800">📋 Моя база «Можно / Нельзя»</h2>
@@ -224,7 +276,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА КАЛЕНДАРЬ (для женщин) -->
+            <!-- ВКЛАДКА КАЛЕНДАРЬ (для женщин) (без изменений) -->
             <div id="calendar-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-700 mb-2">🌸 Женский календарь</h3>
@@ -247,7 +299,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА АНАЛИТИКА -->
+            <!-- ВКЛАДКА АНАЛИТИКА (без изменений) -->
             <div id="analytics-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h2 class="text-base font-bold mb-1">📈 Связь симптомов с фазой цикла</h2>
@@ -289,9 +341,10 @@
     </div>
 
     <script>
-        // ---------- БАЗА ПРОДУКТОВ (ЗАГРУЖАЕТСЯ ИЗ ВНЕШНЕГО ФАЙЛА) ----------
+        // ---------- БАЗА ПРОДУКТОВ ----------
         let myHistamineDB = [];
-        let safeProducts = {}; // { "помидор": "safe", "сыр": "unsafe", ... } — статусы
+        let safeProducts = {};
+        let selectedProducts = []; // массив объектов { name: 'помидор', status: 'safe'|'unsafe'|'question'|'none' }
 
         async function loadProducts() {
             try {
@@ -299,7 +352,6 @@
                 if (!response.ok) throw new Error('Не удалось загрузить базу продуктов');
                 myHistamineDB = await response.json();
                 console.log(`✅ Загружено ${myHistamineDB.length} продуктов`);
-                // Загружаем статусы из localStorage
                 const saved = localStorage.getItem('histolite_safe_products');
                 if (saved) {
                     safeProducts = JSON.parse(saved);
@@ -311,12 +363,76 @@
             }
         }
 
-        // Сохранение статусов
         function saveSafeProducts() {
             localStorage.setItem('histolite_safe_products', JSON.stringify(safeProducts));
         }
 
-        // ----- СПИСОК СИМПТОМОВ -----
+        // ----- ФУНКЦИИ ДЛЯ ЧИПСОВ -----
+        function getProductStatus(name) {
+            return safeProducts[name] || 'none';
+        }
+
+        function getChipClass(status) {
+            if (status === 'safe') return 'chip-safe';
+            if (status === 'unsafe') return 'chip-unsafe';
+            if (status === 'question') return 'chip-question';
+            return 'chip-unknown';
+        }
+
+        function renderChips() {
+            const wrapper = document.getElementById('chips-wrapper');
+            if (!wrapper) return;
+            wrapper.innerHTML = selectedProducts.map((p, index) => {
+                const status = p.status || 'none';
+                const chipClass = getChipClass(status);
+                const label = p.name;
+                return `<span class="chip ${chipClass}">${label}<span class="chip-remove" onclick="removeChip(${index})" title="Удалить">✕</span></span>`;
+            }).join('');
+        }
+
+        function addChip(productName) {
+            const name = productName.trim().toLowerCase();
+            if (!name) return;
+            // Проверяем, есть ли уже такой продукт
+            if (selectedProducts.some(p => p.name === name)) {
+                showModal(`"${name}" уже добавлен`);
+                return;
+            }
+            const status = getProductStatus(name);
+            selectedProducts.push({ name, status });
+            renderChips();
+            document.getElementById('chip-input').value = '';
+        }
+
+        function removeChip(index) {
+            selectedProducts.splice(index, 1);
+            renderChips();
+        }
+
+        // Обработчик ввода в чип-инпут
+        document.addEventListener('DOMContentLoaded', function() {
+            const chipInput = document.getElementById('chip-input');
+            if (chipInput) {
+                chipInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ',') {
+                        e.preventDefault();
+                        const val = this.value.trim();
+                        if (val) {
+                            addChip(val);
+                        }
+                    }
+                });
+                // Потеря фокуса тоже добавляет, если есть текст
+                chipInput.addEventListener('blur', function() {
+                    const val = this.value.trim();
+                    if (val) {
+                        addChip(val);
+                    }
+                });
+            }
+        });
+
+        // ----- ОСТАЛЬНЫЕ ФУНКЦИИ (цикл, дашборд, аналитика и т.д.) -----
         const symptomsList = [
             { id: "brain_fog", name: "🌫️ Туман в голове" },
             { id: "headache", name: "🤕 Головная боль" },
@@ -333,15 +449,14 @@
             { id: "bloating", name: "💨 Вздутие живота" }
         ];
 
-        // ---- ПЕРЕМЕННЫЕ ----
         let userLogs = JSON.parse(localStorage.getItem('histolite_logs')) || [];
         let savedLastPeriodStart = localStorage.getItem('histolite_last_period_start') || '';
         let savedCycleLength = localStorage.getItem('histolite_cycle_length') || 28;
         let savedPmsStartDays = localStorage.getItem('histolite_pms_start_days') || 7;
         let userGender = localStorage.getItem('histolite_gender') || 'female';
-        let safeFilter = 'all'; // all, safe, unsafe, question
+        let safeFilter = 'all';
 
-        // ---- ФУНКЦИИ ДЛЯ РАБОТЫ С ЦИКЛОМ (без изменений) ----
+        // ---- ФУНКЦИИ ДЛЯ ЦИКЛА ----
         function getCurrentCycleDay() {
             if (!savedLastPeriodStart) return null;
             const start = new Date(savedLastPeriodStart);
@@ -468,7 +583,7 @@
             renderTodayDashboard();
         };
 
-        // ---- ДАШБОРД (без изменений) ----
+        // ---- ДАШБОРД ----
         function renderTodayDashboard() {
             const cycleDay = getCurrentCycleDay();
             let riskLevel = 'Низкий';
@@ -564,7 +679,7 @@
             document.getElementById('progress-container').innerHTML = progressHtml;
         }
 
-        // ---- СОХРАНЕНИЕ ЗАПИСИ ----
+        // ---- СОХРАНЕНИЕ ЗАПИСИ (с чипсами) ----
         window.saveLog = function() {
             const date = document.getElementById('log-date').value;
             const time = document.getElementById('log-time').value;
@@ -576,19 +691,26 @@
                     return;
                 }
             }
-            const customRaw = document.getElementById('custom-products').value;
-            let allProducts = customRaw.trim() ? customRaw.split(',').map(s=>s.trim()).filter(s=>s) : [];
+
+            // Собираем продукты из чипсов
+            const products = selectedProducts.map(p => p.name);
+            if (products.length === 0) { showModal('Добавьте хотя бы один продукт'); return; }
+
             const medsRaw = document.getElementById('medications').value;
             let medications = medsRaw.trim() ? medsRaw.split(',').map(s=>s.trim()).filter(s=>s) : [];
-            if (allProducts.length === 0 && medications.length === 0) { showModal('Выберите/введите продукты или лекарства'); return; }
             const symptomsText = document.getElementById('symptoms-text-input').value.trim();
             const cycleDay = (userGender === 'male') ? 0 : getCurrentCycleDay();
+
             userLogs = userLogs.filter(l => !(l.date === date && l.time === time));
-            userLogs.push({ date, time, cycleDay, products: allProducts, medications, symptomsText });
+            userLogs.push({ date, time, cycleDay, products, medications, symptomsText });
             localStorage.setItem('histolite_logs', JSON.stringify(userLogs));
-            document.getElementById('custom-products').value = '';
+
+            // Очищаем чипсы и поля
+            selectedProducts = [];
+            renderChips();
             document.getElementById('medications').value = '';
             document.getElementById('symptoms-text-input').value = '';
+
             renderHistory();
             renderTodayDashboard();
             showModal('Запись сохранена');
@@ -619,12 +741,18 @@
             }).join('');
         };
 
+        // ---- РЕДАКТИРОВАНИЕ (с чипсами) ----
         window.editLog = function(date, time) {
             const log = userLogs.find(l => l.date === date && l.time === time);
             if (!log) return;
             document.getElementById('log-date').value = log.date;
             document.getElementById('log-time').value = log.time;
-            document.getElementById('custom-products').value = (log.products || []).join(', ');
+            // Восстанавливаем чипсы
+            selectedProducts = log.products.map(name => {
+                const status = getProductStatus(name);
+                return { name, status };
+            });
+            renderChips();
             document.getElementById('medications').value = (log.medications || []).join(', ');
             document.getElementById('symptoms-text-input').value = log.symptomsText || '';
             document.querySelector('.bg-white.p-4.rounded-2xl.shadow-sm.border').scrollIntoView({ behavior: 'smooth' });
@@ -668,7 +796,6 @@
                 if (found.level === 'низкий') { levelClass = 'low'; statusText = '🟢 Низкий гистамин — продукт безопасен.'; }
                 else if (found.level === 'средний') { levelClass = 'medium'; statusText = '🟡 Средний гистамин — употребляйте с осторожностью.'; }
                 else if (found.level === 'высокий') { levelClass = 'high'; statusText = '🔴 Высокий гистамин — рекомендуется избегать.'; }
-                // Добавляем личный статус, если есть
                 const safeStatus = safeProducts[found.name];
                 let personalNote = '';
                 if (safeStatus === 'safe') personalNote = ' ✅ Ваш безопасный';
@@ -726,7 +853,14 @@
             }
             saveSafeProducts();
             renderSafeProducts();
-            // Можно обновить поиск, если он открыт
+            // Обновляем чипсы, если такой продукт есть в текущем списке
+            selectedProducts = selectedProducts.map(p => {
+                if (p.name === name) {
+                    p.status = status === 'none' ? 'none' : status;
+                }
+                return p;
+            });
+            renderChips();
         };
 
         window.setSafeFilter = function(filter) {
@@ -855,7 +989,7 @@
             reader.readAsDataURL(file);
         }
 
-        // ---- АНАЛИТИКА (сохраняем триггеры) ----
+        // ---- АНАЛИТИКА ----
         window.runAdvancedAnalytics = function() {
             const container = document.getElementById('analytics-results');
             if (userLogs.length<2) { container.innerHTML = '<div class="p-3 bg-amber-50 text-amber-800 text-xs rounded-xl text-center">📌 Добавьте записи за 2+ дня</div>'; return; }
@@ -1001,7 +1135,6 @@
                     document.getElementById('calendar-nav-btn').style.display = 'flex';
                 }
                 renderTodayDashboard();
-                // Инициализация фильтра "Все"
                 setSafeFilter('all');
             } else {
                 document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
