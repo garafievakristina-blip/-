@@ -50,10 +50,7 @@
             text-align: center;
             flex: 1;
         }
-        .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-        }
+        .stat-number { font-size: 24px; font-weight: 700; }
         .product-status-btn {
             width: 32px;
             height: 32px;
@@ -71,11 +68,18 @@
         .product-status-btn.active-unsafe { border-color: #f87171; background: #fee2e2; }
         .product-status-btn.active-question { border-color: #facc15; background: #fef9c3; }
         .product-status-btn:hover { transform: scale(1.05); }
-        .safe-filter-btn { border-radius: 9999px; padding: 4px 12px; font-size: 12px; border: 1px solid #e2e8f0; background: white; cursor: pointer; }
+        .safe-filter-btn {
+            border-radius: 9999px;
+            padding: 4px 12px;
+            font-size: 12px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
         .safe-filter-btn.active { background: #10b981; color: white; border-color: #10b981; }
         .safe-filter-btn.unsafe-active { background: #ef4444; color: white; border-color: #ef4444; }
         .safe-filter-btn.question-active { background: #f59e0b; color: white; border-color: #f59e0b; }
-        /* Стили для чипсов */
         .chip-container {
             display: flex;
             flex-wrap: wrap;
@@ -103,29 +107,15 @@
         .chip-unsafe { border-color: #f87171; background: #fee2e2; color: #991b1b; }
         .chip-question { border-color: #facc15; background: #fef9c3; color: #854d0e; }
         .chip-unknown { border-color: #cbd5e1; background: #f1f5f9; color: #475569; }
-        .chip-remove {
-            cursor: pointer;
-            font-size: 12px;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-            margin-left: 2px;
-        }
+        .chip-remove { cursor: pointer; font-size: 12px; opacity: 0.6; transition: opacity 0.2s; margin-left: 2px; }
         .chip-remove:hover { opacity: 1; }
-        .chip-input {
-            border: none;
-            background: transparent;
-            outline: none;
-            font-size: 14px;
-            flex: 1;
-            min-width: 80px;
-            color: #0f172a;
-        }
+        .chip-input { border: none; background: transparent; outline: none; font-size: 14px; flex: 1; min-width: 80px; color: #0f172a; }
         .chip-input::placeholder { color: #94a3b8; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen pb-24">
 
-    <!-- ЮРИДИЧЕСКИЙ ЭКРАН + ВЫБОР ПОЛА (без изменений) -->
+    <!-- ЮРИДИЧЕСКИЙ ЭКРАН + ВЫБОР ПОЛА -->
     <div id="legal-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 flex flex-col max-h-[90vh]">
             <div class="text-center text-3xl mb-2">⚖️</div>
@@ -167,7 +157,7 @@
         </header>
 
         <main class="max-w-md mx-auto p-4 space-y-4">
-            <!-- ВКЛАДКА СЕГОДНЯ (без изменений) -->
+            <!-- ВКЛАДКА СЕГОДНЯ -->
             <div id="today-tab" class="tab-content active space-y-4">
                 <div id="today-dashboard">
                     <div id="risk-card" class="risk-card risk-low">
@@ -189,7 +179,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА ДНЕВНИК с чипсами -->
+            <!-- ВКЛАДКА ДНЕВНИК -->
             <div id="diary-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h2 class="text-base font-bold mb-3 text-slate-800">📝 Новая запись</h2>
@@ -197,8 +187,6 @@
                         <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Дата</label><input type="date" id="log-date" class="w-full p-2 border border-slate-200 rounded-xl text-xs bg-slate-50"></div>
                         <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Время</label><input type="time" id="log-time" class="w-full p-2 border border-slate-200 rounded-xl text-xs bg-slate-50"></div>
                     </div>
-
-                    <!-- Блок для чипсов продуктов -->
                     <div class="mb-4">
                         <label class="block text-xs font-bold text-slate-600 mb-1">Добавьте продукты:</label>
                         <div class="chip-container" id="chip-container">
@@ -207,12 +195,10 @@
                         </div>
                         <div class="text-[10px] text-slate-400 mt-1">Цвет чипса показывает статус в вашей базе «Можно / Нельзя».</div>
                     </div>
-
                     <div class="mb-4">
                         <label class="block text-xs font-bold text-slate-600 mb-1">💊 Принятые лекарства (через запятую):</label>
                         <input type="text" id="medications" placeholder="цетиризин 10мг, дао-форте" class="w-full p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
                     </div>
-
                     <div class="space-y-2 border-t border-slate-100 pt-3">
                         <label class="block text-xs font-bold text-slate-600 mb-1">📝 Какие симптомы вы испытываете? (через запятую)</label>
                         <div class="flex gap-2 items-center">
@@ -221,10 +207,8 @@
                         </div>
                         <p class="text-[10px] text-slate-400 mt-1">Нажмите на микрофон и скажите текст.</p>
                     </div>
-
                     <button onclick="saveLog()" class="w-full mt-5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-lg text-sm">Сохранить запись</button>
                 </div>
-
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Последние записи</h3>
@@ -234,7 +218,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА ПРОДУКТЫ (поиск) (без изменений) -->
+            <!-- ВКЛАДКА ПРОДУКТЫ -->
             <div id="products-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h2 class="text-base font-bold mb-3 text-slate-800">🔍 Узнать уровень гистамина</h2>
@@ -258,7 +242,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА БАЗА (можно / нельзя) (без изменений) -->
+            <!-- ВКЛАДКА БАЗА -->
             <div id="safe-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h2 class="text-base font-bold mb-3 text-slate-800">📋 Моя база «Можно / Нельзя»</h2>
@@ -276,7 +260,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА КАЛЕНДАРЬ (для женщин) (без изменений) -->
+            <!-- ВКЛАДКА КАЛЕНДАРЬ (с кнопкой задержки) -->
             <div id="calendar-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-700 mb-2">🌸 Женский календарь</h3>
@@ -289,6 +273,14 @@
                         <input type="number" id="pms-start-days" min="1" max="14" value="7" class="w-full p-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
                         <p class="text-[9px] text-slate-400 mt-1">Например, если ПМС начинается за 10 дней до менструации — поставьте 10.</p>
                     </div>
+                    <!-- НОВАЯ КНОПКА ЗАДЕРЖКИ -->
+                    <div class="mb-4 p-3 bg-amber-50 rounded-xl border border-amber-200">
+                        <div class="flex items-center gap-3">
+                            <label class="text-[10px] uppercase font-bold text-amber-700">⏳ Задержка</label>
+                            <button id="delay-btn" onclick="toggleDelay()" class="px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-600 border border-slate-300 transition">❌ Нет задержки</button>
+                        </div>
+                        <div id="delay-info" class="text-xs text-amber-700 mt-1 hidden"></div>
+                    </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div><label class="text-[10px] uppercase font-bold text-slate-400 mb-1">Текущий день цикла</label><div id="cycle-day-display" class="p-2 border rounded-xl text-sm bg-slate-100 text-center font-bold">—</div></div>
                         <div><label class="text-[10px] uppercase font-bold text-slate-400 mb-1">Фаза</label><div id="phase-badge" class="p-2 rounded-xl text-xs font-bold text-center bg-emerald-50 text-emerald-700 border border-emerald-100 mt-0.5">Не определена</div></div>
@@ -299,7 +291,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА АНАЛИТИКА (без изменений) -->
+            <!-- ВКЛАДКА АНАЛИТИКА -->
             <div id="analytics-tab" class="tab-content space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                     <h2 class="text-base font-bold mb-1">📈 Связь симптомов с фазой цикла</h2>
@@ -322,7 +314,7 @@
             </div>
         </main>
 
-        <!-- НАВИГАЦИЯ (6 вкладок) -->
+        <!-- НАВИГАЦИЯ -->
         <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl flex overflow-x-auto p-2 z-40 space-x-1">
             <button data-tab="today" class="tab-button flex flex-col items-center p-1.5 text-emerald-600 font-bold text-[10px] gap-0.5 flex-shrink-0 min-w-[56px]"><span class="text-lg">📊</span><span>Сегодня</span></button>
             <button data-tab="diary" class="tab-button flex flex-col items-center p-1.5 text-slate-400 font-bold text-[10px] gap-0.5 flex-shrink-0 min-w-[56px]"><span class="text-lg">📝</span><span>Дневник</span></button>
@@ -344,7 +336,7 @@
         // ---------- БАЗА ПРОДУКТОВ ----------
         let myHistamineDB = [];
         let safeProducts = {};
-        let selectedProducts = []; // массив объектов { name: 'помидор', status: 'safe'|'unsafe'|'question'|'none' }
+        let selectedProducts = [];
 
         async function loadProducts() {
             try {
@@ -353,9 +345,7 @@
                 myHistamineDB = await response.json();
                 console.log(`✅ Загружено ${myHistamineDB.length} продуктов`);
                 const saved = localStorage.getItem('histolite_safe_products');
-                if (saved) {
-                    safeProducts = JSON.parse(saved);
-                }
+                if (saved) safeProducts = JSON.parse(saved);
                 renderSafeProducts();
             } catch (error) {
                 console.error('Ошибка загрузки продуктов:', error);
@@ -365,6 +355,49 @@
 
         function saveSafeProducts() {
             localStorage.setItem('histolite_safe_products', JSON.stringify(safeProducts));
+        }
+
+        // ----- ЗАДЕРЖКА МЕНСТРУАЦИИ -----
+        let delayStartDate = localStorage.getItem('histolite_delay_start') || null;
+
+        window.toggleDelay = function() {
+            const btn = document.getElementById('delay-btn');
+            const info = document.getElementById('delay-info');
+            if (!delayStartDate) {
+                delayStartDate = new Date().toISOString().split('T')[0];
+                localStorage.setItem('histolite_delay_start', delayStartDate);
+                btn.textContent = '✅ Задержка отмечена';
+                btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-300 transition';
+                showModal('✅ Задержка менструации отмечена. Приложение будет учитывать это в прогнозе.');
+            } else {
+                localStorage.removeItem('histolite_delay_start');
+                delayStartDate = null;
+                btn.textContent = '❌ Нет задержки';
+                btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-600 border border-slate-300 transition';
+                showModal('Задержка сброшена.');
+            }
+            updateDelayUI();
+            renderTodayDashboard();
+            updateCycleUI();
+        };
+
+        function updateDelayUI() {
+            const info = document.getElementById('delay-info');
+            if (delayStartDate) {
+                const start = new Date(delayStartDate);
+                const now = new Date();
+                const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24)) + 1;
+                info.textContent = `⏳ Задержка: ${diffDays} дн. (начало ${delayStartDate})`;
+                info.classList.remove('hidden');
+                const btn = document.getElementById('delay-btn');
+                btn.textContent = `✅ Задержка ${diffDays} дн.`;
+                btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-300 transition';
+            } else {
+                info.classList.add('hidden');
+                const btn = document.getElementById('delay-btn');
+                btn.textContent = '❌ Нет задержки';
+                btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-600 border border-slate-300 transition';
+            }
         }
 
         // ----- ФУНКЦИИ ДЛЯ ЧИПСОВ -----
@@ -383,17 +416,14 @@
             const wrapper = document.getElementById('chips-wrapper');
             if (!wrapper) return;
             wrapper.innerHTML = selectedProducts.map((p, index) => {
-                const status = p.status || 'none';
-                const chipClass = getChipClass(status);
-                const label = p.name;
-                return `<span class="chip ${chipClass}">${label}<span class="chip-remove" onclick="removeChip(${index})" title="Удалить">✕</span></span>`;
+                const chipClass = getChipClass(p.status || 'none');
+                return `<span class="chip ${chipClass}">${p.name}<span class="chip-remove" onclick="removeChip(${index})" title="Удалить">✕</span></span>`;
             }).join('');
         }
 
         function addChip(productName) {
             const name = productName.trim().toLowerCase();
             if (!name) return;
-            // Проверяем, есть ли уже такой продукт
             if (selectedProducts.some(p => p.name === name)) {
                 showModal(`"${name}" уже добавлен`);
                 return;
@@ -409,7 +439,6 @@
             renderChips();
         }
 
-        // Обработчик ввода в чип-инпут
         document.addEventListener('DOMContentLoaded', function() {
             const chipInput = document.getElementById('chip-input');
             if (chipInput) {
@@ -417,22 +446,18 @@
                     if (e.key === 'Enter' || e.key === ',') {
                         e.preventDefault();
                         const val = this.value.trim();
-                        if (val) {
-                            addChip(val);
-                        }
+                        if (val) addChip(val);
                     }
                 });
-                // Потеря фокуса тоже добавляет, если есть текст
                 chipInput.addEventListener('blur', function() {
                     const val = this.value.trim();
-                    if (val) {
-                        addChip(val);
-                    }
+                    if (val) addChip(val);
                 });
             }
+            updateDelayUI();
         });
 
-        // ----- ОСТАЛЬНЫЕ ФУНКЦИИ (цикл, дашборд, аналитика и т.д.) -----
+        // ----- ОСТАЛЬНЫЕ ФУНКЦИИ -----
         const symptomsList = [
             { id: "brain_fog", name: "🌫️ Туман в голове" },
             { id: "headache", name: "🤕 Головная боль" },
@@ -456,7 +481,7 @@
         let userGender = localStorage.getItem('histolite_gender') || 'female';
         let safeFilter = 'all';
 
-        // ---- ФУНКЦИИ ДЛЯ ЦИКЛА ----
+        // ---- ЦИКЛ ----
         function getCurrentCycleDay() {
             if (!savedLastPeriodStart) return null;
             const start = new Date(savedLastPeriodStart);
@@ -499,6 +524,19 @@
             const display = document.getElementById('cycle-day-display');
             const badge = document.getElementById('phase-badge');
             const forecast = document.getElementById('cycle-forecast');
+
+            if (delayStartDate) {
+                // Если есть задержка, показываем её
+                const start = new Date(delayStartDate);
+                const now = new Date();
+                const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24)) + 1;
+                display.innerText = `⏳ ${diffDays} дн.`;
+                badge.innerText = 'Задержка';
+                badge.className = 'p-2 rounded-xl text-xs font-bold text-center bg-amber-100 text-amber-700 border border-amber-200';
+                forecast.innerHTML = `<p class="text-xs text-amber-700"><strong>⏳ Задержка менструации (${diffDays} дн.)</strong></p><p class="text-xs text-slate-500 mt-1">При задержке чувствительность к гистамину часто повышена. Будьте внимательны к питанию.</p>`;
+                return;
+            }
+
             if (day === null || !savedLastPeriodStart) {
                 display.innerText = '—';
                 badge.innerText = 'Не определена';
@@ -506,12 +544,13 @@
                 forecast.innerHTML = '<p class="text-center text-slate-500">Укажите дату начала последней менструации в календаре.</p>';
                 return;
             }
+
             display.innerText = day;
             const phase = getCyclePhaseName(day);
             badge.innerText = phase;
             badge.className = `p-2 rounded-xl text-xs font-bold text-center border ${getPhaseColor(phase)}`;
-            let advice = '';
-            let adviceColor = 'text-slate-600';
+
+            let advice = '', adviceColor = 'text-slate-600';
             if (phase === "Овуляция" || phase === "ПМС") {
                 advice = '⚠️ Повышенная чувствительность. Выбирайте зелёные продукты.';
                 adviceColor = 'text-amber-700';
@@ -536,6 +575,7 @@
             localStorage.setItem('histolite_cycle_length', savedCycleLength);
             localStorage.setItem('histolite_pms_start_days', savedPmsStartDays);
             updateCycleUI();
+            renderTodayDashboard();
         }
 
         // ---- ЮРИДИЧЕСКИЙ ЭКРАН ----
@@ -574,12 +614,11 @@
 
             if (userGender === 'male') {
                 document.getElementById('calendar-nav-btn').style.display = 'none';
-                if (document.getElementById('calendar-tab').classList.contains('active')) {
-                    switchTab('diary');
-                }
+                if (document.getElementById('calendar-tab').classList.contains('active')) switchTab('diary');
             } else {
                 document.getElementById('calendar-nav-btn').style.display = 'flex';
             }
+            updateDelayUI();
             renderTodayDashboard();
         };
 
@@ -590,7 +629,17 @@
             let riskClass = 'risk-low';
             let riskReason = 'Фаза цикла: стабильная';
             let tip = 'Сегодня хороший день, чтобы попробовать новые продукты.';
-            if (userGender !== 'male' && cycleDay !== null) {
+
+            // Проверяем задержку
+            if (delayStartDate) {
+                const start = new Date(delayStartDate);
+                const now = new Date();
+                const delayDays = Math.floor((now - start) / (1000 * 60 * 60 * 24)) + 1;
+                riskLevel = 'Высокий';
+                riskClass = 'risk-high';
+                riskReason = `⏳ Задержка ${delayDays} дн. + гормональный дисбаланс`;
+                tip = '⚠️ При задержке чувствительность к гистамину часто повышена. Будьте особенно внимательны к питанию.';
+            } else if (userGender !== 'male' && cycleDay !== null) {
                 const phase = getCyclePhaseName(cycleDay);
                 if (phase === 'Овуляция' || phase === 'ПМС') {
                     riskLevel = 'Высокий'; riskClass = 'risk-high'; riskReason = `Фаза цикла: ${phase} (чувствительность повышена)`;
@@ -609,6 +658,7 @@
                 riskReason = 'Цикл не настроен';
                 tip = 'Настройте календарь цикла для более точных прогнозов.';
             }
+
             const riskCard = document.getElementById('risk-card');
             riskCard.className = `risk-card ${riskClass}`;
             document.getElementById('risk-level').textContent = riskLevel;
@@ -679,23 +729,21 @@
             document.getElementById('progress-container').innerHTML = progressHtml;
         }
 
-        // ---- СОХРАНЕНИЕ ЗАПИСИ (с чипсами) ----
+        // ---- СОХРАНЕНИЕ ЗАПИСИ ----
         window.saveLog = function() {
             const date = document.getElementById('log-date').value;
             const time = document.getElementById('log-time').value;
             if (!date) { showModal('Укажите дату'); return; }
             if (userGender !== 'male') {
                 const cycleDay = getCurrentCycleDay();
-                if (cycleDay === null || !savedLastPeriodStart) {
+                if (cycleDay === null && !delayStartDate && !savedLastPeriodStart) {
                     showModal('Сначала настройте календарь цикла (укажите дату начала менструации).');
                     return;
                 }
             }
 
-            // Собираем продукты из чипсов
+            if (selectedProducts.length === 0) { showModal('Добавьте хотя бы один продукт'); return; }
             const products = selectedProducts.map(p => p.name);
-            if (products.length === 0) { showModal('Добавьте хотя бы один продукт'); return; }
-
             const medsRaw = document.getElementById('medications').value;
             let medications = medsRaw.trim() ? medsRaw.split(',').map(s=>s.trim()).filter(s=>s) : [];
             const symptomsText = document.getElementById('symptoms-text-input').value.trim();
@@ -705,7 +753,6 @@
             userLogs.push({ date, time, cycleDay, products, medications, symptomsText });
             localStorage.setItem('histolite_logs', JSON.stringify(userLogs));
 
-            // Очищаем чипсы и поля
             selectedProducts = [];
             renderChips();
             document.getElementById('medications').value = '';
@@ -716,7 +763,7 @@
             showModal('Запись сохранена');
         };
 
-        // ---- ИСТОРИЯ (без изменений) ----
+        // ---- ИСТОРИЯ ----
         window.renderHistory = function() {
             const container = document.getElementById('history-container');
             if (!userLogs.length) { container.innerHTML = '<div class="text-center text-slate-400 p-4">Нет записей</div>'; return; }
@@ -741,13 +788,11 @@
             }).join('');
         };
 
-        // ---- РЕДАКТИРОВАНИЕ (с чипсами) ----
         window.editLog = function(date, time) {
             const log = userLogs.find(l => l.date === date && l.time === time);
             if (!log) return;
             document.getElementById('log-date').value = log.date;
             document.getElementById('log-time').value = log.time;
-            // Восстанавливаем чипсы
             selectedProducts = log.products.map(name => {
                 const status = getProductStatus(name);
                 return { name, status };
@@ -791,8 +836,7 @@
             );
             if (foundItems.length > 0) {
                 const found = foundItems[0];
-                let levelClass = '';
-                let statusText = '';
+                let levelClass = '', statusText = '';
                 if (found.level === 'низкий') { levelClass = 'low'; statusText = '🟢 Низкий гистамин — продукт безопасен.'; }
                 else if (found.level === 'средний') { levelClass = 'medium'; statusText = '🟡 Средний гистамин — употребляйте с осторожностью.'; }
                 else if (found.level === 'высокий') { levelClass = 'high'; statusText = '🔴 Высокий гистамин — рекомендуется избегать.'; }
@@ -816,13 +860,9 @@
             const search = document.getElementById('safe-search-input')?.value.toLowerCase() || '';
             const filtered = myHistamineDB.filter(p => p.name.includes(search));
             let displayList = filtered;
-            if (safeFilter === 'safe') {
-                displayList = filtered.filter(p => safeProducts[p.name] === 'safe');
-            } else if (safeFilter === 'unsafe') {
-                displayList = filtered.filter(p => safeProducts[p.name] === 'unsafe');
-            } else if (safeFilter === 'question') {
-                displayList = filtered.filter(p => safeProducts[p.name] === 'question');
-            }
+            if (safeFilter === 'safe') displayList = filtered.filter(p => safeProducts[p.name] === 'safe');
+            else if (safeFilter === 'unsafe') displayList = filtered.filter(p => safeProducts[p.name] === 'unsafe');
+            else if (safeFilter === 'question') displayList = filtered.filter(p => safeProducts[p.name] === 'question');
 
             if (displayList.length === 0) {
                 container.innerHTML = '<div class="text-center text-slate-400 p-4">Ничего не найдено</div>';
@@ -846,18 +886,12 @@
         }
 
         window.setProductStatus = function(name, status) {
-            if (status === 'none') {
-                delete safeProducts[name];
-            } else {
-                safeProducts[name] = status;
-            }
+            if (status === 'none') delete safeProducts[name];
+            else safeProducts[name] = status;
             saveSafeProducts();
             renderSafeProducts();
-            // Обновляем чипсы, если такой продукт есть в текущем списке
             selectedProducts = selectedProducts.map(p => {
-                if (p.name === name) {
-                    p.status = status === 'none' ? 'none' : status;
-                }
+                if (p.name === name) p.status = status === 'none' ? 'none' : status;
                 return p;
             });
             renderChips();
@@ -877,7 +911,7 @@
             renderSafeProducts();
         };
 
-        // ---- СКАНЕР (без изменений) ----
+        // ---- СКАНЕР ----
         let html5QrCodeSearch = null;
         window.scanBarcodeForSearch = function() {
             const container = document.getElementById('scanner-search-container');
@@ -911,8 +945,7 @@
                         const resultDiv = document.getElementById('product-search-result');
                         resultDiv.classList.remove('hidden', 'low', 'medium', 'high', 'unknown');
                         if (found) {
-                            let levelClass = '';
-                            let statusText = '';
+                            let levelClass = '', statusText = '';
                             if (found.level === 'низкий') { levelClass = 'low'; statusText = '🟢 Низкий гистамин — безопасен.'; }
                             else if (found.level === 'средний') { levelClass = 'medium'; statusText = '🟡 Средний гистамин — с осторожностью.'; }
                             else if (found.level === 'высокий') { levelClass = 'high'; statusText = '🔴 Высокий гистамин — избегать.'; }
@@ -1134,6 +1167,7 @@
                 } else {
                     document.getElementById('calendar-nav-btn').style.display = 'flex';
                 }
+                updateDelayUI();
                 renderTodayDashboard();
                 setSafeFilter('all');
             } else {
