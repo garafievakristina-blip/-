@@ -575,7 +575,6 @@
             });
         };
 
-        // Обработчики кликов по кнопкам навигации
         document.querySelectorAll('.tab-button').forEach(btn => {
             btn.addEventListener('click', function() {
                 const tab = this.dataset.tab;
@@ -584,7 +583,7 @@
         });
 
         // ================================================================
-        // 4. ЧИПСЫ (ПРОДУКТЫ)
+        // 4. ЧИПСЫ (ПРОДУКТЫ) - С РАЗБИВКОЙ ДЛЯ РУЧНОГО ВВОДА
         // ================================================================
         function getProductStatus(name) {
             return safeProducts[name] || 'none';
@@ -624,7 +623,19 @@
             renderChips();
         }
 
-        // Обработчики для поля ввода продуктов (Enter и запятая)
+        // Функция разбивки текста на отдельные продукты (общая для голоса и ручного ввода)
+        function splitProducts(text) {
+            text = text.replace(/\s+/g, ' ').trim();
+            text = text.replace(/\s+и\s+/g, ', ');
+            text = text.replace(/\s+или\s+/g, ', ');
+            let parts = text.split(/[,.]\s*/).filter(p => p.trim() !== '');
+            if (parts.length === 0) {
+                parts = text.split(/\s+/).filter(p => p.trim() !== '');
+            }
+            return parts;
+        }
+
+        // Обработчики для поля ввода продуктов (с разбивкой)
         document.addEventListener('DOMContentLoaded', function() {
             const chipInput = document.getElementById('chip-input');
             if (chipInput) {
@@ -632,12 +643,28 @@
                     if (e.key === 'Enter' || e.key === ',') {
                         e.preventDefault();
                         const val = this.value.trim();
-                        if (val) addChip(val);
+                        if (val) {
+                            const products = splitProducts(val);
+                            products.forEach(function(product) {
+                                if (product.trim()) {
+                                    addChip(product.trim());
+                                }
+                            });
+                            this.value = '';
+                        }
                     }
                 });
                 chipInput.addEventListener('blur', function() {
                     const val = this.value.trim();
-                    if (val) addChip(val);
+                    if (val) {
+                        const products = splitProducts(val);
+                        products.forEach(function(product) {
+                            if (product.trim()) {
+                                addChip(product.trim());
+                            }
+                        });
+                        this.value = '';
+                    }
                 });
             }
         });
@@ -814,7 +841,6 @@
         // ================================================================
         let recognition = null;
 
-        // Назначаем обработчик на кнопку микрофона симптомов
         document.addEventListener('DOMContentLoaded', function() {
             const micBtn = document.getElementById('mic-button');
             if (micBtn) {
@@ -882,11 +908,10 @@
         }
 
         // ================================================================
-        // 9. ГОЛОСОВОЙ ВВОД ДЛЯ ПРОДУКТОВ (независимый)
+        // 9. ГОЛОСОВОЙ ВВОД ДЛЯ ПРОДУКТОВ (с разбивкой)
         // ================================================================
         let productRecognition = null;
 
-        // Назначаем обработчик на кнопку микрофона продуктов
         document.addEventListener('DOMContentLoaded', function() {
             const micBtn = document.getElementById('mic-products-btn');
             if (micBtn) {
@@ -896,18 +921,7 @@
             }
         });
 
-        function splitProducts(text) {
-            text = text.replace(/\s+/g, ' ').trim();
-            text = text.replace(/\s+и\s+/g, ', ');
-            text = text.replace(/\s+или\s+/g, ', ');
-            let parts = text.split(/[,.]\s*/).filter(p => p.trim() !== '');
-            if (parts.length === 0) {
-                parts = text.split(/\s+/).filter(p => p.trim() !== '');
-            }
-            return parts;
-        }
-
-        function startVoiceInputForProducts() {
+        window.startVoiceInputForProducts = function() {
             const micBtn = document.getElementById('mic-products-btn');
             if (productRecognition) {
                 productRecognition.stop();
@@ -968,7 +982,7 @@
                 micBtn.classList.remove('mic-active');
                 micBtn.textContent = '🎤';
             }
-        }
+        };
 
         // ================================================================
         // 10. СОХРАНЕНИЕ ЗАПИСИ
@@ -1058,7 +1072,6 @@
             let riskReason = 'Фаза цикла: стабильная';
             let tip = 'Сегодня хороший день, чтобы попробовать новые продукты.';
 
-            // Проверяем задержку
             if (delayStartDate) {
                 const start = new Date(delayStartDate);
                 const now = new Date();
@@ -1101,7 +1114,6 @@
             document.getElementById('risk-reason').textContent = riskReason;
             document.getElementById('today-tip').textContent = tip;
 
-            // Статистика
             const now = new Date();
             const sevenDaysAgo = new Date(now);
             sevenDaysAgo.setDate(now.getDate() - 7);
@@ -1450,7 +1462,7 @@
             }, 100);
         }
 
-        console.log('✅ Приложение загружено. Голосовой ввод для продуктов и симптомов работает независимо.');
+        console.log('✅ Приложение загружено. Ручной и голосовой ввод продуктов теперь разбивают текст на отдельные чипсы.');
     </script>
 
 </body>
