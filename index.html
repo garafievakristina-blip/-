@@ -1531,16 +1531,18 @@
         });
 
         // ================================================================
-        // 21. ДОПОЛНИТЕЛЬНАЯ ИНИЦИАЛИЗАЦИЯ
+        // 21. ДОПОЛНИТЕЛЬНАЯ ИНИЦИАЛИЗАЦИЯ (если пользователь уже принял согласие)
         // ================================================================
         if (localStorage.getItem('histolite_legal_accepted') === 'true') {
-            setTimeout(() => {
+            setTimeout(function() {
                 const gender = localStorage.getItem('histolite_gender') || 'female';
                 userGender = gender;
                 document.getElementById('legal-modal').style.display = 'none';
                 document.getElementById('app-body').classList.remove('opacity-30', 'pointer-events-none');
+
                 renderHistory();
                 loadProducts();
+
                 const lengthInput = document.getElementById('cycle-length');
                 const pmsInput = document.getElementById('pms-start-days');
                 if (lengthInput) {
@@ -1554,7 +1556,27 @@
                     });
                 }
                 if (pmsInput) {
-                   
+                    pmsInput.value = savedPmsStartDays;
+                    pmsInput.addEventListener('change', function() {
+                        const val = parseInt(this.value) || 7;
+                        savedPmsStartDays = val;
+                        localStorage.setItem('histolite_pms_start_days', val);
+                        renderCycleCalendar();
+                        renderTodayDashboard();
+                    });
+                }
+
+                if (userGender === 'male') {
+                    document.getElementById('calendar-nav-btn').style.display = 'none';
+                } else {
+                    document.getElementById('calendar-nav-btn').style.display = 'flex';
+                }
+
+                renderTodayDashboard();
+                checkNotifications();
+                loadRecipes();
+                renderCycleCalendar();
+            }, 100);
         }
 
         console.log('✅ Приложение загружено. Календарь использует корректную логику: ожидаемый день начала = первый день + (длительность цикла - 1)');
