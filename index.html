@@ -20,8 +20,6 @@
         }
     </script>
     <style>
-        /* ===== ВСЕ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ ===== */
-        /* (здесь были ваши стили, я их не меняю для краткости, но в полном коде они есть) */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         ::-webkit-scrollbar { width: 4px; }
@@ -372,23 +370,20 @@
         </div>
     </div>
     <div id="cycle-day-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display:none;">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
-        <h4 class="text-base font-bold text-slate-800 mb-2">День цикла</h4>
-        <p class="text-sm text-slate-600 mb-3" id="cycle-day-modal-date">Дата:</p>
-        <p class="text-sm text-slate-600 mb-3" id="cycle-day-modal-info">День цикла:</p>
-
-        <label class="block text-xs font-bold text-slate-600 mb-1">Симптомы за этот день</label>
-        <textarea id="cycle-day-symptoms" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 min-h-[120px]" placeholder="Например: головная боль, вздутие, зуд"></textarea>
-
-        <label class="block text-xs font-bold text-slate-600 mb-1 mt-3">Комментарий</label>
-        <textarea id="cycle-day-comment" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 min-h-[80px]" placeholder="Например: хуже перед сном"></textarea>
-
-        <div class="flex gap-2 mt-4">
-            <button onclick="saveCycleDay()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-xl text-sm">Сохранить</button>
-            <button onclick="closeCycleDayModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-xl text-sm">Отмена</button>
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+            <h4 class="text-base font-bold text-slate-800 mb-2">День цикла</h4>
+            <p class="text-sm text-slate-600 mb-3" id="cycle-day-modal-date">Дата:</p>
+            <p class="text-sm text-slate-600 mb-3" id="cycle-day-modal-info">День цикла:</p>
+            <label class="block text-xs font-bold text-slate-600 mb-1">Симптомы за этот день</label>
+            <textarea id="cycle-day-symptoms" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 min-h-[120px]" placeholder="Например: головная боль, вздутие, зуд"></textarea>
+            <label class="block text-xs font-bold text-slate-600 mb-1 mt-3">Комментарий</label>
+            <textarea id="cycle-day-comment" class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 min-h-[80px]" placeholder="Например: хуже перед сном"></textarea>
+            <div class="flex gap-2 mt-4">
+                <button onclick="saveCycleDay()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-xl text-sm">Сохранить</button>
+                <button onclick="closeCycleDayModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-xl text-sm">Отмена</button>
+            </div>
         </div>
     </div>
-</div>
 
     <div id="recipe-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display:none;">
         <!-- ... -->
@@ -418,8 +413,7 @@
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
         let cycleDayNotes = JSON.parse(localStorage.getItem('histolite_cycle_day_notes')) || {};
-let selectedCycleDayDate = null;
-        
+        let selectedCycleDayDate = null;
 
         const symptomsList = [
             { id: "brain_fog", name: "🌫️ Туман в голове" },
@@ -441,7 +435,6 @@ let selectedCycleDayDate = null;
         // 2. ФУНКЦИИ ЦИКЛА
         // ================================================================
 
-        // Вычисляет текущий день цикла (1 – день начала последней менструации)
         function getCurrentCycleDay() {
             if (!savedLastPeriodStart) return null;
             const start = new Date(savedLastPeriodStart);
@@ -454,14 +447,10 @@ let selectedCycleDayDate = null;
             return diffDays;
         }
 
-        // Определяет фазу цикла по номеру дня
-        // Длительность цикла сохраняется в savedCycleLength (например, 25)
         function getCyclePhaseName(day) {
             const len = parseInt(savedCycleLength);
             if (day === null || day > len) return "Вне цикла";
-            // Овуляция: день = длина цикла - 14 (например, 25-14=11)
             const ovulationDay = len - 14;
-            // ПМС начинается за savedPmsStartDays до конца цикла
             const pmsStart = len - parseInt(savedPmsStartDays);
             if (day <= 5) return "Начало цикла";
             if (day >= 6 && day < ovulationDay) return "Фолликулярная";
@@ -508,7 +497,7 @@ let selectedCycleDayDate = null;
         });
 
         // ================================================================
-        // 4. ЧИПСЫ (ПРОДУКТЫ) – без изменений
+        // 4. ЧИПСЫ (ПРОДУКТЫ)
         // ================================================================
         function normalizeProductName(name) {
             return String(name).trim().toLowerCase().replace(/\s+/g, ' ');
@@ -992,81 +981,82 @@ let selectedCycleDayDate = null;
             document.getElementById('event-modal').style.display = 'none';
             selectedDate = null;
         }
+
         function openCycleDay(year, month, day) {
-    const dateStr = formatDate(year, month, day);
-    const dateObj = new Date(year, month, day);
-    const cycleDay = savedLastPeriodStart
-        ? Math.floor((new Date(dateStr) - new Date(savedLastPeriodStart)) / (1000 * 60 * 60 * 24)) + 1
-        : null;
+            const dateStr = formatDate(year, month, day);
+            const dateObj = new Date(year, month, day);
+            const cycleDay = savedLastPeriodStart
+                ? Math.floor((new Date(dateStr) - new Date(savedLastPeriodStart)) / (1000 * 60 * 60 * 24)) + 1
+                : null;
 
-    selectedCycleDayDate = dateStr;
-    document.getElementById('cycle-day-modal-date').textContent = `Дата: ${dateObj.toLocaleDateString('ru-RU')}`;
-    document.getElementById('cycle-day-modal-info').textContent = cycleDay ? `День цикла: ${cycleDay}` : 'Цикл не настроен';
+            selectedCycleDayDate = dateStr;
+            document.getElementById('cycle-day-modal-date').textContent = `Дата: ${dateObj.toLocaleDateString('ru-RU')}`;
+            document.getElementById('cycle-day-modal-info').textContent = cycleDay ? `День цикла: ${cycleDay}` : 'Цикл не настроен';
 
-    const saved = cycleDayNotes[dateStr] || { symptoms: '', comment: '' };
-    document.getElementById('cycle-day-symptoms').value = saved.symptoms || '';
-    document.getElementById('cycle-day-comment').value = saved.comment || '';
+            const saved = cycleDayNotes[dateStr] || { symptoms: '', comment: '' };
+            document.getElementById('cycle-day-symptoms').value = saved.symptoms || '';
+            document.getElementById('cycle-day-comment').value = saved.comment || '';
 
-    document.getElementById('cycle-day-modal').style.display = 'flex';
-}
+            document.getElementById('cycle-day-modal').style.display = 'flex';
+        }
 
-function closeCycleDayModal() {
-    document.getElementById('cycle-day-modal').style.display = 'none';
-    selectedCycleDayDate = null;
-}
+        function closeCycleDayModal() {
+            document.getElementById('cycle-day-modal').style.display = 'none';
+            selectedCycleDayDate = null;
+        }
 
-window.saveCycleDay = function() {
-    if (!selectedCycleDayDate) return;
+        window.saveCycleDay = function() {
+            if (!selectedCycleDayDate) return;
 
-    cycleDayNotes[selectedCycleDayDate] = {
-        symptoms: document.getElementById('cycle-day-symptoms').value.trim(),
-        comment: document.getElementById('cycle-day-comment').value.trim()
-    };
+            cycleDayNotes[selectedCycleDayDate] = {
+                symptoms: document.getElementById('cycle-day-symptoms').value.trim(),
+                comment: document.getElementById('cycle-day-comment').value.trim()
+            };
 
-    localStorage.setItem('histolite_cycle_day_notes', JSON.stringify(cycleDayNotes));
-    closeCycleDayModal();
-    showModal('Данные дня сохранены');
-};
+            localStorage.setItem('histolite_cycle_day_notes', JSON.stringify(cycleDayNotes));
+            closeCycleDayModal();
+            showModal('Данные дня сохранены');
+        };
 
         window.confirmEvent = function(type) {
-    if (!selectedDate) {
-        showModal('Ошибка: дата не выбрана');
-        return;
-    }
+            if (!selectedDate) {
+                showModal('Ошибка: дата не выбрана');
+                return;
+            }
 
-    if (type === 'clear') {
-        delete cycleMarks[selectedDate];
+            if (type === 'clear') {
+                delete cycleMarks[selectedDate];
 
-        if (selectedDate === savedLastPeriodStart) {
-            savedLastPeriodStart = '';
-            localStorage.setItem('histolite_last_period_start', '');
-        }
+                if (selectedDate === savedLastPeriodStart) {
+                    savedLastPeriodStart = '';
+                    localStorage.setItem('histolite_last_period_start', '');
+                }
 
-        localStorage.setItem('histolite_cycle_marks', JSON.stringify(cycleMarks));
-        closeEventModal();
-        renderCycleCalendar();
-        renderTodayDashboard();
-        showModal('Отметка снята');
-        return;
-    }
+                localStorage.setItem('histolite_cycle_marks', JSON.stringify(cycleMarks));
+                closeEventModal();
+                renderCycleCalendar();
+                renderTodayDashboard();
+                showModal('Отметка снята');
+                return;
+            }
 
-    if (type === 'first_day') {
-        for (let key in cycleMarks) {
-            if (cycleMarks[key] === 'first_day') delete cycleMarks[key];
-        }
-        savedLastPeriodStart = selectedDate;
-        localStorage.setItem('histolite_last_period_start', savedLastPeriodStart);
-    }
+            if (type === 'first_day') {
+                for (let key in cycleMarks) {
+                    if (cycleMarks[key] === 'first_day') delete cycleMarks[key];
+                }
+                savedLastPeriodStart = selectedDate;
+                localStorage.setItem('histolite_last_period_start', savedLastPeriodStart);
+            }
 
-    cycleMarks[selectedDate] = type;
-    localStorage.setItem('histolite_cycle_marks', JSON.stringify(cycleMarks));
+            cycleMarks[selectedDate] = type;
+            localStorage.setItem('histolite_cycle_marks', JSON.stringify(cycleMarks));
 
-    const label = type === 'first_day' ? 'Первый день цикла' : type === 'ovulation' ? 'Овуляция' : 'Последний день менструации';
-    closeEventModal();
-    renderCycleCalendar();
-    renderTodayDashboard();
-    showModal(`Отмечено: ${label}`);
-};
+            const label = type === 'first_day' ? 'Первый день цикла' : type === 'ovulation' ? 'Овуляция' : 'Последний день менструации';
+            closeEventModal();
+            renderCycleCalendar();
+            renderTodayDashboard();
+            showModal(`Отмечено: ${label}`);
+        };
 
         window.changeMonth = function(delta) {
             currentMonth += delta;
@@ -1087,29 +1077,23 @@ window.saveCycleDay = function() {
             renderCycleCalendar();
         };
 
-        // Главная функция отрисовки календаря
         function renderCycleCalendar() {
             const container = document.getElementById('cycle-load-calendar');
             if (!container) return;
 
-            // Принудительно читаем актуальные настройки из localStorage
             savedCycleLength = parseInt(localStorage.getItem('histolite_cycle_length')) || 28;
             savedPmsStartDays = parseInt(localStorage.getItem('histolite_pms_start_days')) || 7;
 
-            // ---- ИСПРАВЛЕННЫЙ РАСЧЁТ ОЖИДАЕМОЙ ДАТЫ НАЧАЛА СЛЕДУЮЩЕГО ЦИКЛА ----
-            // Правило: первый день цикла (день 1) = дата начала последней менструации.
-            // Длительность цикла – это количество дней от первого дня до дня,
-            // предшествующего первому дню следующего цикла.
-            // Поэтому следующий первый день = дата_начала + (длительность_цикла - 1) дней.
-            // Например: 2 июня + 24 дня = 26 июня (при цикле 25 дней).
-            // Вычисляем дату ожидаемого начала следующего цикла
-if (savedLastPeriodStart) {
-    const start = new Date(savedLastPeriodStart);
-    expectedStartDate = new Date(start);
-    expectedStartDate.setDate(start.getDate() + parseInt(savedCycleLength) - 1);
-} else {
-    expectedStartDate = null;
-}
+            // Правильный расчёт ожидаемой даты начала следующего цикла:
+            // первый день + (длительность цикла - 1)
+            if (savedLastPeriodStart) {
+                const start = new Date(savedLastPeriodStart);
+                expectedStartDate = new Date(start);
+                expectedStartDate.setDate(start.getDate() + parseInt(savedCycleLength) - 1);
+            } else {
+                expectedStartDate = null;
+            }
+
             const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
             document.getElementById('calendar-month-label').textContent = `${monthNames[currentMonth]} ${currentYear}`;
 
@@ -1123,7 +1107,7 @@ if (savedLastPeriodStart) {
             const todayStr = formatDate(today.getFullYear(), today.getMonth(), today.getDate());
 
             const cycleLength = parseInt(savedCycleLength);
-            const ovulationDay = cycleLength - 14; // день овуляции (относительно первого дня)
+            const ovulationDay = cycleLength - 14;
 
             let html = '<div class="grid grid-cols-7 gap-1 text-xs">';
             const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
@@ -1143,13 +1127,11 @@ if (savedLastPeriodStart) {
                 let extraClasses = '';
                 let label = d;
 
-                // Проверяем, является ли эта дата ожидаемым днём начала следующего цикла
                 const isExpected = expectedStartDate && dateStr === formatDate(expectedStartDate.getFullYear(), expectedStartDate.getMonth(), expectedStartDate.getDate());
                 if (isExpected && !mark && !isToday) {
                     extraClasses += ' expected';
                 }
 
-                // Обработка отметок (first_day, ovulation, last_day)
                 if (mark === 'first_day') {
                     bg = 'bg-red-200';
                     text = 'text-red-800';
@@ -1163,27 +1145,22 @@ if (savedLastPeriodStart) {
                     text = 'text-purple-800';
                     extraClasses += ' last-day has-mark';
                 } else {
-                    // Если нет явной отметки, вычисляем фазу на основе savedLastPeriodStart
                     if (savedLastPeriodStart) {
                         const startDate = new Date(savedLastPeriodStart);
                         const currentDate = new Date(currentYear, currentMonth, d);
-                        // diffDays – номер дня цикла (1 – первый день)
                         const diffDays = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
                         if (diffDays >= 1 && diffDays <= 45) {
                             if (diffDays <= cycleLength) {
-                                // В пределах цикла – окрашиваем фазу
                                 const phase = getCyclePhaseName(diffDays);
                                 if (phase === 'Начало цикла') bg = 'bg-red-200';
                                 else if (phase === 'Фолликулярная') bg = 'bg-green-200';
                                 else if (phase === 'Овуляция') { bg = 'bg-amber-200'; extraClasses += ' ovulation'; }
                                 else if (phase === 'Лютеиновая') bg = 'bg-green-200';
                                 else if (phase === 'ПМС') bg = 'bg-rose-200';
-                                // Если это день овуляции по расчёту, но без отметки, добавляем рамку
                                 if (diffDays === ovulationDay && mark !== 'ovulation') {
                                     extraClasses += ' ovulation';
                                 }
                             } else {
-                                // Задержка: diffDays > cycleLength
                                 bg = 'bg-gray-200';
                                 text = 'text-gray-500';
                                 extraClasses += ' delay';
@@ -1235,7 +1212,7 @@ if (savedLastPeriodStart) {
         });
 
         // ================================================================
-        // 14. ДАШБОРД (СЕГОДНЯ) – ЗАДЕРЖКА РАССЧИТЫВАЕТСЯ КОРРЕКТНО
+        // 14. ДАШБОРД (СЕГОДНЯ)
         // ================================================================
         function renderTodayDashboard() {
             const cycleDay = getCurrentCycleDay();
@@ -1244,7 +1221,6 @@ if (savedLastPeriodStart) {
             let riskReason = 'Фаза цикла: стабильная';
             let tip = 'Сегодня хороший день, чтобы попробовать новые продукты.';
 
-            // Задержка: если текущий день цикла больше длины цикла
             let delayDays = 0;
             if (savedLastPeriodStart && cycleDay !== null) {
                 if (cycleDay > savedCycleLength) {
@@ -1291,7 +1267,6 @@ if (savedLastPeriodStart) {
             document.getElementById('risk-reason').textContent = riskReason;
             document.getElementById('today-tip').textContent = tip;
 
-            // Остальная статистика (количество записей, серия, триггеры) – без изменений
             const now = new Date();
             const sevenDaysAgo = new Date(now);
             sevenDaysAgo.setDate(now.getDate() - 7);
@@ -1398,47 +1373,34 @@ if (savedLastPeriodStart) {
         // ================================================================
         // 19. ЮРИДИЧЕСКОЕ СОГЛАСИЕ
         // ================================================================
-      function toggleLegalButton() {
-    const chk = document.getElementById('legal-checkbox');
-    const btn = document.getElementById('legal-submit-btn');
-    if (!chk || !btn) return;
+        function toggleLegalButton() {
+            const chk = document.getElementById('legal-checkbox');
+            const btn = document.getElementById('legal-submit-btn');
+            if (!chk || !btn) return;
 
-    btn.disabled = !chk.checked;
-    btn.className = chk.checked
-        ? "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition cursor-pointer shadow-md"
-        : "w-full bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl text-xs transition cursor-not-allowed";
-}
+            btn.disabled = !chk.checked;
+            btn.className = chk.checked
+                ? "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition cursor-pointer shadow-md"
+                : "w-full bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl text-xs transition cursor-not-allowed";
+        }
 
-window.acceptLegal = function() {
-    const chk = document.getElementById('legal-checkbox');
-    if (!chk || !chk.checked) {
-        showModal('Поставьте галочку, чтобы войти в приложение.');
-        return;
-    }
-
-    const genderRadio = document.querySelector('input[name="gender"]:checked');
-    userGender = genderRadio ? genderRadio.value : 'female';
-    localStorage.setItem('histolite_gender', userGender);
-    localStorage.setItem('histolite_legal_accepted', 'true');
-
-    document.getElementById('legal-modal').style.display = 'none';
-    document.getElementById('app-body').classList.remove('opacity-30', 'pointer-events-none');
-
-    renderHistory();
-    loadProducts();
-    renderTodayDashboard();
-    checkNotifications();
-    loadRecipes();
-    renderCycleCalendar();
-};
-                
-
-            if (userGender === 'male') {
-                document.getElementById('calendar-nav-btn').style.display = 'none';
-                if (document.getElementById('calendar-tab').classList.contains('active')) switchTab('diary');
-            } else {
-                document.getElementById('calendar-nav-btn').style.display = 'flex';
+        window.acceptLegal = function() {
+            const chk = document.getElementById('legal-checkbox');
+            if (!chk || !chk.checked) {
+                showModal('Поставьте галочку, чтобы войти в приложение.');
+                return;
             }
+
+            const genderRadio = document.querySelector('input[name="gender"]:checked');
+            userGender = genderRadio ? genderRadio.value : 'female';
+            localStorage.setItem('histolite_gender', userGender);
+            localStorage.setItem('histolite_legal_accepted', 'true');
+
+            document.getElementById('legal-modal').style.display = 'none';
+            document.getElementById('app-body').classList.remove('opacity-30', 'pointer-events-none');
+
+            renderHistory();
+            loadProducts();
             renderTodayDashboard();
             checkNotifications();
             loadRecipes();
