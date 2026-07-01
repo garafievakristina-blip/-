@@ -419,8 +419,7 @@
         let currentYear = new Date().getFullYear();
         let cycleDayNotes = JSON.parse(localStorage.getItem('histolite_cycle_day_notes')) || {};
 let selectedCycleDayDate = null;
-        let cycleDayNotes = JSON.parse(localStorage.getItem('histolite_cycle_day_notes')) || {};
-let selectedCycleDayDate = null;
+        
 
         const symptomsList = [
             { id: "brain_fog", name: "🌫️ Туман в голове" },
@@ -1408,11 +1407,10 @@ if (savedLastPeriodStart) {
     btn.className = chk.checked
         ? "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition cursor-pointer shadow-md"
         : "w-full bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl text-xs transition cursor-not-allowed";
-} 
+}
 
-       window.acceptLegal = function() {
+window.acceptLegal = function() {
     const chk = document.getElementById('legal-checkbox');
-    const btn = document.getElementById('legal-submit-btn');
     if (!chk || !chk.checked) {
         showModal('Поставьте галочку, чтобы войти в приложение.');
         return;
@@ -1433,8 +1431,6 @@ if (savedLastPeriodStart) {
     loadRecipes();
     renderCycleCalendar();
 };
-            }
-            if (pmsInput) {
                 pmsInput.value = savedPmsStartDays;
                 pmsInput.addEventListener('change', function() {
                     const val = parseInt(this.value) || 7;
