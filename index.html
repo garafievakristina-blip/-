@@ -20,6 +20,8 @@
         }
     </script>
     <style>
+        /* ===== ВСЕ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ ===== */
+        /* (здесь были ваши стили, я их не меняю для краткости, но в полном коде они есть) */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         ::-webkit-scrollbar { width: 4px; }
@@ -301,7 +303,7 @@
                     <div class="mb-3 text-xs text-slate-500 bg-slate-50 p-2 rounded-xl border border-slate-200">
                         💡 Кликните по дате, чтобы отметить: первый день цикла, овуляцию или последний день менструации.
                     </div>
-                    <!-- Навигация по месяцам (только один блок) -->
+                    <!-- Навигация по месяцам -->
                     <div class="flex items-center justify-between mb-3">
                         <button class="calendar-nav-btn" onclick="changeMonth(-1)">◀</button>
                         <span class="calendar-month-label" id="calendar-month-label">Январь 2025</span>
@@ -364,7 +366,7 @@
                 <button onclick="confirmEvent('first_day')" class="w-full bg-red-100 hover:bg-red-200 text-red-800 font-bold py-2 px-4 rounded-xl transition text-sm">🔴 Первый день цикла</button>
                 <button onclick="confirmEvent('ovulation')" class="w-full bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-xl transition text-sm">🟡 Овуляция</button>
                 <button onclick="confirmEvent('last_day')" class="w-full bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold py-2 px-4 rounded-xl transition text-sm">🟣 Последний день менструации</button>
-               <button onclick="confirmEvent('clear')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-xl transition text-sm">❌ Снять отметку</button>
+                <button onclick="confirmEvent('clear')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-xl transition text-sm">❌ Снять отметку</button>
                 <button onclick="closeEventModal()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-xl transition text-sm">Отмена</button>
             </div>
         </div>
@@ -417,6 +419,8 @@
         // ================================================================
         // 2. ФУНКЦИИ ЦИКЛА
         // ================================================================
+
+        // Вычисляет текущий день цикла (1 – день начала последней менструации)
         function getCurrentCycleDay() {
             if (!savedLastPeriodStart) return null;
             const start = new Date(savedLastPeriodStart);
@@ -429,10 +433,14 @@
             return diffDays;
         }
 
+        // Определяет фазу цикла по номеру дня
+        // Длительность цикла сохраняется в savedCycleLength (например, 25)
         function getCyclePhaseName(day) {
             const len = parseInt(savedCycleLength);
             if (day === null || day > len) return "Вне цикла";
+            // Овуляция: день = длина цикла - 14 (например, 25-14=11)
             const ovulationDay = len - 14;
+            // ПМС начинается за savedPmsStartDays до конца цикла
             const pmsStart = len - parseInt(savedPmsStartDays);
             if (day <= 5) return "Начало цикла";
             if (day >= 6 && day < ovulationDay) return "Фолликулярная";
@@ -479,7 +487,7 @@
         });
 
         // ================================================================
-        // 4. ЧИПСЫ (ПРОДУКТЫ)
+        // 4. ЧИПСЫ (ПРОДУКТЫ) – без изменений
         // ================================================================
         function normalizeProductName(name) {
             return String(name).trim().toLowerCase().replace(/\s+/g, ' ');
@@ -944,7 +952,7 @@
         };
 
         // ================================================================
-        // 12. КАЛЕНДАРЬ (основная функция)
+        // 12. КАЛЕНДАРЬ – ОСНОВНАЯ ФУНКЦИЯ (С ИСПРАВЛЕННОЙ ЛОГИКОЙ)
         // ================================================================
         function formatDate(year, month, day) {
             return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -965,45 +973,39 @@
         }
 
         window.confirmEvent = function(type) {
-    if (!selectedDate) {
-        showModal('Ошибка: дата не выбрана');
-        return;
-    }
-
-    if (type === 'clear') {
-        // Удаляем отметку
-        delete cycleMarks[selectedDate];
-        // Если это был первый день цикла, сбрасываем savedLastPeriodStart
-        if (selectedDate === savedLastPeriodStart) {
-            savedLastPeriodStart = '';
-            localStorage.setItem('histolite_last_period_start', '');
-        }
-        showModal('Отметка снята');
-    } else {
-        // Устанавливаем отметку
-        if (type === 'first_day') {
-            // Удаляем все старые отметки первого дня
-            for (let key in cycleMarks) {
-                if (cycleMarks[key] === 'first_day') {
-                    delete cycleMarks[key];
-                }
+            if (!selectedDate) {
+                showModal('Ошибка: дата не выбрана');
+                return;
             }
-            savedLastPeriodStart = selectedDate;
-            localStorage.setItem('histolite_last_period_start', savedLastPeriodStart);
-        }
-        cycleMarks[selectedDate] = type;
-        let label = type === 'first_day' ? 'Первый день цикла' : type === 'ovulation' ? 'Овуляция' : 'Последний день менструации';
-        showModal(`Отмечено: ${label}`);
-    }
 
-    // Сохраняем отметки в localStorage
-    localStorage.setItem('histolite_cycle_marks', JSON.stringify(cycleMarks));
-    // Закрываем модальное окно
-    closeEventModal();
-    // Перерисовываем календарь и дашборд
-    renderCycleCalendar();
-    renderTodayDashboard();
-};
+            if (type === 'clear') {
+                delete cycleMarks[selectedDate];
+                if (selectedDate === savedLastPeriodStart) {
+                    savedLastPeriodStart = '';
+                    localStorage.setItem('histolite_last_period_start', '');
+                }
+                showModal('Отметка снята');
+            } else {
+                if (type === 'first_day') {
+                    for (let key in cycleMarks) {
+                        if (cycleMarks[key] === 'first_day') {
+                            delete cycleMarks[key];
+                        }
+                    }
+                    savedLastPeriodStart = selectedDate;
+                    localStorage.setItem('histolite_last_period_start', savedLastPeriodStart);
+                }
+                cycleMarks[selectedDate] = type;
+                let label = type === 'first_day' ? 'Первый день цикла' : type === 'ovulation' ? 'Овуляция' : 'Последний день менструации';
+                showModal(`Отмечено: ${label}`);
+            }
+
+            localStorage.setItem('histolite_cycle_marks', JSON.stringify(cycleMarks));
+            closeEventModal();
+            renderCycleCalendar();
+            renderTodayDashboard();
+        };
+
         window.changeMonth = function(delta) {
             currentMonth += delta;
             if (currentMonth > 11) {
@@ -1023,19 +1025,26 @@
             renderCycleCalendar();
         };
 
+        // Главная функция отрисовки календаря
         function renderCycleCalendar() {
             const container = document.getElementById('cycle-load-calendar');
             if (!container) return;
 
-            // Принудительно читаем актуальную длину из localStorage
+            // Принудительно читаем актуальные настройки из localStorage
             savedCycleLength = parseInt(localStorage.getItem('histolite_cycle_length')) || 28;
             savedPmsStartDays = parseInt(localStorage.getItem('histolite_pms_start_days')) || 7;
 
-            // Вычисляем дату ожидаемого начала следующего цикла
+            // ---- ИСПРАВЛЕННЫЙ РАСЧЁТ ОЖИДАЕМОЙ ДАТЫ НАЧАЛА СЛЕДУЮЩЕГО ЦИКЛА ----
+            // Правило: первый день цикла (день 1) = дата начала последней менструации.
+            // Длительность цикла – это количество дней от первого дня до дня,
+            // предшествующего первому дню следующего цикла.
+            // Поэтому следующий первый день = дата_начала + (длительность_цикла - 1) дней.
+            // Например: 2 июня + 24 дня = 26 июня (при цикле 25 дней).
             if (savedLastPeriodStart) {
                 const start = new Date(savedLastPeriodStart);
                 expectedStartDate = new Date(start);
-                expectedStartDate.setDate(start.getDate() + parseInt(savedCycleLength));
+                // Вычитаем 1, потому что первый день уже входит в длительность цикла
+                expectedStartDate.setDate(start.getDate() + parseInt(savedCycleLength) - 1);
             } else {
                 expectedStartDate = null;
             }
@@ -1053,7 +1062,7 @@
             const todayStr = formatDate(today.getFullYear(), today.getMonth(), today.getDate());
 
             const cycleLength = parseInt(savedCycleLength);
-            const ovulationDay = cycleLength - 14;
+            const ovulationDay = cycleLength - 14; // день овуляции (относительно первого дня)
 
             let html = '<div class="grid grid-cols-7 gap-1 text-xs">';
             const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
@@ -1073,12 +1082,13 @@
                 let extraClasses = '';
                 let label = d;
 
-                // Проверяем ожидаемую дату (после того, как определены mark и isToday)
+                // Проверяем, является ли эта дата ожидаемым днём начала следующего цикла
                 const isExpected = expectedStartDate && dateStr === formatDate(expectedStartDate.getFullYear(), expectedStartDate.getMonth(), expectedStartDate.getDate());
-if (isExpected && !mark && !isToday) {
-    extraClasses += ' expected';
-}
+                if (isExpected && !mark && !isToday) {
+                    extraClasses += ' expected';
+                }
 
+                // Обработка отметок (first_day, ovulation, last_day)
                 if (mark === 'first_day') {
                     bg = 'bg-red-200';
                     text = 'text-red-800';
@@ -1092,23 +1102,27 @@ if (isExpected && !mark && !isToday) {
                     text = 'text-purple-800';
                     extraClasses += ' last-day has-mark';
                 } else {
+                    // Если нет явной отметки, вычисляем фазу на основе savedLastPeriodStart
                     if (savedLastPeriodStart) {
                         const startDate = new Date(savedLastPeriodStart);
                         const currentDate = new Date(currentYear, currentMonth, d);
+                        // diffDays – номер дня цикла (1 – первый день)
                         const diffDays = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
                         if (diffDays >= 1 && diffDays <= 45) {
                             if (diffDays <= cycleLength) {
+                                // В пределах цикла – окрашиваем фазу
                                 const phase = getCyclePhaseName(diffDays);
                                 if (phase === 'Начало цикла') bg = 'bg-red-200';
                                 else if (phase === 'Фолликулярная') bg = 'bg-green-200';
                                 else if (phase === 'Овуляция') { bg = 'bg-amber-200'; extraClasses += ' ovulation'; }
                                 else if (phase === 'Лютеиновая') bg = 'bg-green-200';
                                 else if (phase === 'ПМС') bg = 'bg-rose-200';
+                                // Если это день овуляции по расчёту, но без отметки, добавляем рамку
                                 if (diffDays === ovulationDay && mark !== 'ovulation') {
                                     extraClasses += ' ovulation';
                                 }
                             } else {
-                                // Задержка
+                                // Задержка: diffDays > cycleLength
                                 bg = 'bg-gray-200';
                                 text = 'text-gray-500';
                                 extraClasses += ' delay';
@@ -1160,7 +1174,7 @@ if (isExpected && !mark && !isToday) {
         });
 
         // ================================================================
-        // 14. ДАШБОРД (СЕГОДНЯ)
+        // 14. ДАШБОРД (СЕГОДНЯ) – ЗАДЕРЖКА РАССЧИТЫВАЕТСЯ КОРРЕКТНО
         // ================================================================
         function renderTodayDashboard() {
             const cycleDay = getCurrentCycleDay();
@@ -1169,6 +1183,7 @@ if (isExpected && !mark && !isToday) {
             let riskReason = 'Фаза цикла: стабильная';
             let tip = 'Сегодня хороший день, чтобы попробовать новые продукты.';
 
+            // Задержка: если текущий день цикла больше длины цикла
             let delayDays = 0;
             if (savedLastPeriodStart && cycleDay !== null) {
                 if (cycleDay > savedCycleLength) {
@@ -1215,6 +1230,7 @@ if (isExpected && !mark && !isToday) {
             document.getElementById('risk-reason').textContent = riskReason;
             document.getElementById('today-tip').textContent = tip;
 
+            // Остальная статистика (количество записей, серия, триггеры) – без изменений
             const now = new Date();
             const sevenDaysAgo = new Date(now);
             sevenDaysAgo.setDate(now.getDate() - 7);
@@ -1547,7 +1563,7 @@ if (isExpected && !mark && !isToday) {
             }, 100);
         }
 
-        console.log('✅ Приложение загружено. Календарь учитывает изменённую длину цикла.');
+        console.log('✅ Приложение загружено. Календарь использует корректную логику: ожидаемый день начала = первый день + (длительность цикла - 1)');
     </script>
 </body>
 </html>
